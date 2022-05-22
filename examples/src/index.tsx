@@ -9,7 +9,10 @@ const Main: Component = () => {
   return (
     <div>
       <h1>solid-hcaptcha</h1>
-      <HCaptcha />
+      <HCaptcha
+        sitekey="10000000-ffff-ffff-ffff-000000000001"
+        onVerify={(...e) => console.log(e)}
+      />
     </div>
   );
 }

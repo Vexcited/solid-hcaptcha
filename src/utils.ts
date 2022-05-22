@@ -1,5 +1,10 @@
 export interface GenerateQueryParams {
-  apihost?: string;
+  [key: string]:
+    | string
+    | boolean
+    | number
+    | undefined
+    | null
 }
 
 export const generateQuery = (params: GenerateQueryParams) => {
@@ -7,9 +12,11 @@ export const generateQuery = (params: GenerateQueryParams) => {
   const values = entries.filter(([_key, value]) => value || value === false);
 
   const queries = values.map(([key, value]) => {
+    if (!value) return;
     return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
   });
 
   const query = queries.join("&");
   return query;
 };
+

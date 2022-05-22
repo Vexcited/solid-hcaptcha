@@ -1,7 +1,7 @@
 export interface HCaptchaState {
   isApiReady: boolean;
   isRemoved: boolean;
-  elementId?: string;
+  elementId: string;
   captchaId: string;
 }
 
@@ -57,7 +57,6 @@ export interface HCaptchaProps {
    */
   theme?: "light" | "dark";
 
-
   /**
    * Set the tabindex of the widget and popup.
    * When appropriate, this can make navigation of your site more intuitive.
@@ -67,27 +66,38 @@ export interface HCaptchaProps {
   tabindex?: number;
 
   /**
-   * When setting to `auto`, hCaptcha auto-detects language via the user's browser.
-   * This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages).
+   * Manually set the ID of the hCaptcha component.
+   * Make sure each hCaptcha component generated on a single
+   * page has its own unique ID when using this prop.
    * 
-   * Defaults to `auto`. The language code should be a ISO 639-2 code.
+   * Defaults to "solid-hcaptcha-script".
    */
-  languageOverride?: string;
+  id?: string;
+
+  /**
+   * Advanced configuration for
+   * the hCaptcha component.
+   */
+  config?: HCaptchaConfig;
+}
+
+
+export interface HCaptchaConfig {
+
 
   /**
    * Disable drop-in replacement for reCAPTCHA with `false`
    * to prevent hCaptcha from injecting into `window.grecaptcha`.
    */
-  reCaptchaCompat?: boolean;
+  recaptchacompat?: boolean;
 
   /**
-   * Manually set the ID of the hCaptcha component.
-   * Make sure each hCaptcha component generated on a single
-   * page has its own unique ID when using this prop.
+   * When setting to `auto`, hCaptcha auto-detects language via the user's browser.
+   * This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages).
    * 
-   * Defaults to a random ID.
+   * Defaults to `auto`. The language code should be a ISO 639-2 code.
    */
-  id?: string;
+  hl?: string;
 
   apihost?: string;
   assethost?: string;
@@ -98,3 +108,4 @@ export interface HCaptchaProps {
   sentry?: string;
   custom?: boolean;
 }
+

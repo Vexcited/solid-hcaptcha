@@ -1,12 +1,14 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@hcaptcha/types': ^1.0.1
   rimraf: ^3.0.2
   rollup: ^2.74.1
   rollup-preset-solid: ^1.4.0
   solid-js: ^1.4.2
 
 devDependencies:
+  '@hcaptcha/types': 1.0.1
   rimraf: 3.0.2
   rollup: 2.74.1
   rollup-preset-solid: 1.4.0
@@ -1207,6 +1209,10 @@ packages:
     dependencies:
       '@babel/helper-validator-identifier': 7.16.7
       to-fast-properties: 2.0.0
+    dev: true
+
+  /@hcaptcha/types/1.0.1:
+    resolution: {integrity: sha512-l0etN3sKLFlsgcPa4afsS5HW5uRvelVnKDaTuFrWE/SjFF+YpaHIZKbZGpEbripjfxM4pfQoOUFX1mWVYMuoAw==}
     dev: true
 
   /@jridgewell/gen-mapping/0.1.1:
