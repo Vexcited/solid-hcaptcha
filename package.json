@@ -3,20 +3,26 @@
   "description": "Unofficial port of react-hcpatcha for Solid.",
   "version": "0.0.1",
   "license": "MIT",
-  "source": "./src/solid-hcaptcha.tsx",
-  "main": "dist/cjs/solid-hcaptcha.js",
-  "module": "dist/esm/solid-hcaptcha.js",
-  "types": "dist/types/solid-hcaptcha.d.ts",
+  "source": "./src/index.tsx",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
+  "keywords": [
+    "hcaptcha",
+    "captcha",
+    "solidjs",
+    "solid"
+  ],
   "exports": {
     ".": {
-      "solid": "./dist/source/solid-hcaptcha.jsx",
-      "import": "./dist/esm/solid-hcaptcha.js",
-      "browser": "./dist/esm/solid-hcaptcha.js",
-      "require": "./dist/cjs/solid-hcaptcha.js",
-      "node": "./dist/cjs/solid-hcaptcha.js"
+      "solid": "./dist/source/index.jsx",
+      "import": "./dist/esm/index.js",
+      "browser": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "node": "./dist/cjs/index.js"
     }
   },
   "scripts": {
