@@ -1,0 +1,40 @@
+{
+  "name": "solid-hcaptcha",
+  "description": "Unofficial port of react-hcpatcha for Solid.",
+  "version": "0.0.1",
+  "license": "MIT",
+  "source": "./src/solid-hcaptcha.tsx",
+  "main": "dist/cjs/solid-hcaptcha.js",
+  "module": "dist/esm/solid-hcaptcha.js",
+  "types": "dist/types/solid-hcaptcha.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "solid": "./dist/source/solid-hcaptcha.jsx",
+      "import": "./dist/esm/solid-hcaptcha.js",
+      "browser": "./dist/esm/solid-hcaptcha.js",
+      "require": "./dist/cjs/solid-hcaptcha.js",
+      "node": "./dist/cjs/solid-hcaptcha.js"
+    }
+  },
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "rollup -c"
+  },
+  "author": {
+    "url": "https://github.com/Vexcited/solid-hcaptcha",
+    "email": "mikkel@milescode.dev",
+    "name": "Mikkel RINGAUD"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "rollup": "^2.74.1",
+    "rollup-preset-solid": "^1.4.0",
+    "solid-js": "^1.4.2"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.4.2"
+  }
+}
