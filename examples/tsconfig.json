@@ -10,11 +10,7 @@
     "jsxImportSource": "solid-js",
     "types": ["vite/client"],
     "noEmit": true,
-    "isolatedModules": true,
-    "baseUrl": ".",
-    "paths": {
-      "solid-hcaptcha": ["../src"]
-    }
+    "isolatedModules": true
   },
   "include": ["src"]
 }

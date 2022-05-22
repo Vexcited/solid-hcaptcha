@@ -2,7 +2,8 @@
 import type { Component } from "solid-js";
 import { render } from "solid-js/web";
 
-import HCaptcha from "solid-hcaptcha";
+// "../../src" corresponds to "solid-hcaptcha"
+import HCaptcha from "../../src";
 
 const Main: Component = () => {
   return (
