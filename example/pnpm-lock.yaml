@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  solid-app-router: ^0.3.3
   solid-hcaptcha: link:..
   solid-js: ^1.4.2
   typescript: ^4.6.4
@@ -8,6 +9,7 @@ specifiers:
   vite-plugin-solid: ^2.2.6
 
 dependencies:
+  solid-app-router: 0.3.3_solid-js@1.4.2
   solid-hcaptcha: link:..
   solid-js: 1.4.2
 
@@ -788,6 +790,14 @@ packages:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
     hasBin: true
     dev: true
+
+  /solid-app-router/0.3.3_solid-js@1.4.2:
+    resolution: {integrity: sha512-JEn0gi6q8Pq9M2Ml3CLeNzenxuBrOrQg4aQyeIZTNjOAeEil/9YiaAJk+US78sIdVcqflTneN5KZgJMIGJ0rFQ==}
+    peerDependencies:
+      solid-js: ^1.3.5
+    dependencies:
+      solid-js: 1.4.2
+    dev: false
 
   /solid-js/1.4.2:
     resolution: {integrity: sha512-IU5yKuT8P/n5F5g8j1rTXqxUdPYmoZDk/074TG94AEYf/nyXAeG82BSge4/lLIbCfUcnGUJ6DRdebIjujOAYyg==}

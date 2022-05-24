@@ -1,41 +1,36 @@
 /* @refresh reload */
-import type { Component } from "solid-js";
+import { Component, For } from "solid-js";
 import { render } from "solid-js/web";
 
-import type { HCaptchaFunctions } from "solid-hcaptcha";
-import HCaptcha from "solid-hcaptcha";
+import { Router, useRoutes, hashIntegration, Link } from "solid-app-router";
+import { routes } from "./demos";
 
-const Main: Component = () => {
-  let captcha: HCaptchaFunctions | undefined;
-
-  const submitCaptcha = async (event: MouseEvent) => {
-    console.log(captcha);
-
-    event.preventDefault();
-    if (!captcha) return;
-
-    const response = captcha.execute({ async: true });
-    console.log(response);
-  }
+const AppRouting: Component = () => {
+  const Routes = useRoutes(routes.map(route_data => route_data.route));
 
   return (
-    <div>
-      <HCaptcha
-        theme="light"
-        onLoad={captcha_instance => (captcha = captcha_instance)}
-        sitekey="10000000-ffff-ffff-ffff-000000000001"
-        size="invisible"
+    <Router
+      /** Using an hash router for GitHub Pages. */
+      source={hashIntegration()}
+    >
+      <h1>solid-hcaptcha</h1>
 
-      />
-
-      <button onClick={submitCaptcha}>
-        Show invisible captcha
-      </button>
-    </div>
+      <ul>
+        <For each={routes.filter(route => route.show)}>
+          {route_data =>
+            <li>
+              <Link href={route_data.route.path}>{route_data.name}</Link>
+            </li>
+          }
+        </For>
+      </ul>
+      
+      <Routes />
+    </Router>
   );
 }
 
 render(
-  () => <Main />,
+  () => <AppRouting />,
   document.getElementById("root") as HTMLDivElement
 );
