@@ -12,11 +12,7 @@ Sign up at [hCaptcha](https://www.hcaptcha.com) to get your sitekey today. You n
 
 This package is in development ! Please come back later...
 
-You can install this library via your favorite package manager.
-
-## Usage
-
-> You can see multiple use cases in [the examples](./example/src/).
+<!-- You can install this library via your favorite package manager. -->
 
 <!-- ```bash
 # NPM
@@ -29,4 +25,29 @@ yarn add solid-hcaptcha
 pnpm add solid-hcaptcha
 ``` -->
 
-<!-- ### Usage -->
+## Usage
+
+> You can see multiple use cases on the [example website](https://vexcited.github.io/solid-hcaptcha).
+<!-- ```typescript
+import HCaptcha from "solid-hcaptcha";
+
+
+``` -->
+
+Please, come back later, it's coming very soon...
+
+## Development
+
+> `git clone https://github.com/Vexcited/solid-hcaptcha`
+
+I use `pnpm` as the package manager, so run `pnpm install` to install the dependencies.
+
+### Scripts
+
+* `pnpm build`: Builds to the `dist` folder.
+* `pnpm lint`: Checks if there's any TypeScript error.
+* `pnpm release`: Script that I use to release new versions of this package.
+
+### Example
+
+You can see how to contribute to the [example website](https://vexcited.github.io/solid-hcaptcha) in the [`example` folder](./example/). 
