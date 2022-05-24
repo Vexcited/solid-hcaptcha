@@ -1,12 +1,18 @@
 export interface HCaptchaState {
+  /** Whether the captcha is ready or not. */
   isApiReady: boolean;
+  
+  /** Whether the captcha was removed or not. */
   isRemoved: boolean;
+
+  /** ID of the `div` element that contains the hCaptcha widget. */
   elementId: string;
-  captchaId: string;
+
+  /** Captcha identifier given by hCaptcha. */
+  captchaId: string | null;
 }
 
 export interface HCaptchaProps {
-  
   /**
    * When an error occurs. Component will
    * reset immediately after an error.
@@ -23,7 +29,7 @@ export interface HCaptchaProps {
   onExpire?: () => any;
 
   /** When the hCaptcha API loads. */
-  onLoad?: () => any;
+  onLoad?: (hcaptcha: HCaptchaFunctions) => any;
 
   /** When the user display of a challenge starts. */
   onOpen?: () => any;
@@ -32,7 +38,7 @@ export interface HCaptchaProps {
   onClose?: () => any;
 
   /** When the user display of a challenge times out with no answer. */
-  onChalExpired?: () => any;
+  onChallengeExpired?: () => any;
 
   /**
    * This is your sitekey, this allows you to load captcha.
@@ -81,10 +87,7 @@ export interface HCaptchaProps {
   config?: HCaptchaConfig;
 }
 
-
 export interface HCaptchaConfig {
-
-
   /**
    * Disable drop-in replacement for reCAPTCHA with `false`
    * to prevent hCaptcha from injecting into `window.grecaptcha`.
@@ -109,3 +112,14 @@ export interface HCaptchaConfig {
   custom?: boolean;
 }
 
+export interface HCaptchaFunctions {
+  resetCaptcha(): void;
+  renderCaptcha(): void;
+  removeCaptcha(callback: () => any): void;
+  
+  getRespKey(): string | null;
+  getResponse(): string | null;
+  
+  setData(data: ConfigSetData): void;
+  execute(config?: ConfigExecute): void | Promise<HCaptchaResponse>;
+}

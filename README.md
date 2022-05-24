@@ -14,6 +14,10 @@ This package is in development ! Please come back later...
 
 You can install this library via your favorite package manager.
 
+## Usage
+
+> You can see multiple use cases in [the examples](./example/src/).
+
 <!-- ```bash
 # NPM
 npm install solid-hcaptcha --save

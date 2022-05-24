@@ -1,4 +1,4 @@
- {
+{
   "compilerOptions": {
     "strict": true,
     "target": "ESNext",
@@ -8,11 +8,12 @@
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "noEmit": true,
-    "isolatedModules": true, 
-    "types": [
-      "@hcaptcha/types"
-    ]
+    "types": ["@hcaptcha/types"],
+    "declaration": true,
+    "outDir": "./dist/source",
+    "declarationDir": "./dist/types",
+    "isolatedModules": true,
+    "allowJs": true
   },
   "include": ["src"]
 }

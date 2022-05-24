@@ -6,6 +6,7 @@ specifiers:
   rollup: ^2.74.1
   rollup-preset-solid: ^1.4.0
   solid-js: ^1.4.2
+  typescript: ^4.6.4
 
 devDependencies:
   '@hcaptcha/types': 1.0.1
@@ -13,6 +14,7 @@ devDependencies:
   rollup: 2.74.1
   rollup-preset-solid: 1.4.0
   solid-js: 1.4.2
+  typescript: 4.6.4
 
 packages:
 
