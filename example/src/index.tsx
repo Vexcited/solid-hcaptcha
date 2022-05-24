@@ -14,6 +14,7 @@ const AppRouting: Component = () => {
       source={hashIntegration()}
     >
       <h1>solid-hcaptcha</h1>
+      <p>A Solid component wrapper for the hCaptcha widget.</p>
 
       <ul>
         <For each={routes.filter(route => route.show)}>
