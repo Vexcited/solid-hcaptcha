@@ -10,11 +10,9 @@ Sign up at [hCaptcha](https://www.hcaptcha.com) to get your sitekey today. You n
 
 ## Installation
 
-This package is in development ! Please come back later...
+You can install this library via your favorite package manager.
 
-<!-- You can install this library via your favorite package manager. -->
-
-<!-- ```bash
+```bash
 # NPM
 npm install solid-hcaptcha --save
 
@@ -23,18 +21,30 @@ yarn add solid-hcaptcha
 
 # PNPm
 pnpm add solid-hcaptcha
-``` -->
+```
 
 ## Usage
 
 > You can see multiple use cases on the [example website](https://vexcited.github.io/solid-hcaptcha).
-<!-- ```typescript
+
+```typescript
+// First, import the component.
 import HCaptcha from "solid-hcaptcha";
 
+// Then use it in your components !
+const App: Component = () => {
+  return (
+    <HCaptcha
+      sitekey="10000000-ffff-ffff-ffff-000000000001"
+      onVerify={token => console.log(token)}
+      theme="light"
+      size="normal"
+    />
+  );
+};
 
-``` -->
-
-Please, come back later, it's coming very soon...
+export default App;
+``` 
 
 ## Development
 
