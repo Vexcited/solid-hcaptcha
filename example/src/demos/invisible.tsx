@@ -21,7 +21,7 @@ const InvisibleCaptchaDemo: Component = () => {
         <HCaptcha
           theme="light"
           onLoad={captcha_instance => (captcha = captcha_instance)}
-          sitekey="10000000-ffff-ffff-ffff-000000000001"
+          sitekey={import.meta.env.VITE_HCAPTCHA_SITEKEY}
           size="invisible"
         />
   
