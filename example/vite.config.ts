@@ -1,20 +1,13 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
 
-/** Additional environment variables. */
-const viteEnv = {};
-
-/** Load variables from process environment variables. */
-Object.keys(process.env).forEach((key) => {
-  if (key.startsWith("VITE_")) {
-    viteEnv[`import.meta.env.${key}`] = process.env[key];
-  }
-});
-
-
 export default defineConfig({
   plugins: [solidPlugin()],
-  define: viteEnv,
+  
+  /** Global variables. */
+  define: {
+    HCAPTCHA_SITEKEY: JSON.stringify("1cfa7710-ea6d-4734-bf4f-489e27fcb4eb")
+  },
 
   build: {
     target: "esnext",
