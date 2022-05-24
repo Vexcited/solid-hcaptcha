@@ -3,8 +3,12 @@ import solidPlugin from "vite-plugin-solid";
 
 export default defineConfig({
   plugins: [solidPlugin()],
+  
   build: {
     target: "esnext",
     polyfillDynamicImport: false
-  }
+  },
+
+  /** Based on the GitHub Pages deploy URL. */
+  base: "/solid-hcaptcha/"
 });
