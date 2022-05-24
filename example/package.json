@@ -1,6 +1,6 @@
 {
   "name": "solid-hcaptcha-example",
-  "version": "0.0.0", 
+  "version": "0.0.0",
   "description": "Example for the solid-hcaptcha package.",
   "scripts": {
     "dev": "vite",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "solid-app-router": "^0.3.3",
-    "solid-hcaptcha": "latest",
+    "solid-hcaptcha": "^0.1.0",
     "solid-js": "^1.4.2"
   }
 }
