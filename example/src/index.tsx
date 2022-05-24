@@ -15,15 +15,17 @@ const Main: Component = () => {
     if (!captcha) return;
 
     const response = captcha.execute({ async: true });
+    console.log(response);
   }
 
   return (
     <div>
       <HCaptcha
         theme="light"
-        onLoad={captcha_instance => console.log(captcha_instance)}
+        onLoad={captcha_instance => (captcha = captcha_instance)}
         sitekey="10000000-ffff-ffff-ffff-000000000001"
-        size="normal"
+        size="invisible"
+
       />
 
       <button onClick={submitCaptcha}>

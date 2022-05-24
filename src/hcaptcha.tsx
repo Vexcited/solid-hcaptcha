@@ -119,17 +119,7 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     hcaptcha.remove(captchaId);
   });
 
-  createEffect(() => {
-    console.log("effect (props):", props);
-
-    // If they have changed, remove current captcha and render a new one.
-    removeCaptcha(() => {
-      console.info("effect (removeCaptcha): removed and rendering a new one.");
-      renderCaptcha();
-    });
-  });
-
-  const renderCaptcha = (onReady?: () => void) => {
+  const renderCaptcha: HCaptchaFunctions["renderCaptcha"] = (onReady) => {
     const { isApiReady } = state;
     if (!isApiReady || !captcha_ref) return;
 
@@ -148,16 +138,17 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
       "size"                 : props.size     || "normal"
     });
 
-    console.info("renderCaptcha: (renderParams)", renderParams);
-
-    // Render hCaptcha widget and provide necessary callbacks.
+    /**
+     * Render hCaptcha widget and provide necessary callbacks
+     * and get the captcha ID from the returned value.
+     */
     const captchaId = hcaptcha.render(captcha_ref, renderParams) as string;
 
     setState({ isRemoved: false, captchaId });
     if (onReady) onReady();
   }
 
-  const resetCaptcha = () => {
+  const resetCaptcha: HCaptchaFunctions["resetCaptcha"] = () => {
     const { captchaId } = state;
     if (!isReady() || !captchaId) return;
 
@@ -175,17 +166,20 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     callback && callback()
   };
 
-  /**
-   * Programmatically call hCaptcha to run, same
-   * action as a user clicking the checkbox.
-   * Mostly used when hCaptcha is set to `invisible`.
-   */
-   const execute: HCaptchaFunctions["execute"] = (config) => {
+  const executeSync: HCaptchaFunctions["executeSync"] = () => {
     const { captchaId } = state;
     if (!isReady() || !captchaId) return;
 
-    return hcaptcha.execute(captchaId, config);
-  }
+    return hcaptcha.execute(captchaId, { async: false });
+  };
+
+  const execute: HCaptchaFunctions["execute"] = async () => {
+    const { captchaId } = state;
+    if (!isReady() || !captchaId) return;
+
+    const response = await hcaptcha.execute(captchaId, { async: true }) as HCaptchaResponse;
+    return response;
+  };
 
   const setData: HCaptchaFunctions["setData"] = (data) => {
     const { captchaId } = state;
@@ -195,30 +189,27 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     hcaptcha.setData(captchaId, data);
   }
 
-  /**
-   * Get the response token, if any.
-   * When the hCaptcha ID cannot be resolved, it throws `null`. 
-   */
-  const getResponse = () => {
+  const getResponse: HCaptchaFunctions["getResponse"] = () => {
     const { captchaId } = state;
     if (!captchaId) return null;
 
     return hcaptcha.getResponse(captchaId);
   }
 
-  /**
-   * Get the associated ekey (challenge ID) for a successful solve.
-   * When the hCaptcha ID cannot be resolved, it throws `null`.
-   */
-  const getRespKey = () => {
+  const getRespKey: HCaptchaFunctions["getRespKey"] = () => {
     const { captchaId } = state;
     if (!captchaId) return null;
 
     return hcaptcha.getRespKey(captchaId)
   }
 
+  /**
+   * Helpers to be returned on the `onLoad` callback.
+   * Can be stored to perform actions on the hCaptcha widget later.
+   */
   const hcaptcha_functions: HCaptchaFunctions = {
     execute,
+    executeSync,
     getRespKey,
     getResponse,
     removeCaptcha,
@@ -227,20 +218,22 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     setData
   };
 
+  /** Handle load with the `onLoad` prop. */
   const handleOnLoad = () => {
     setState({ isApiReady: true });
 
-    // Render captcha and wait for captcha ID.
+    /** Render captcha and wait for captcha ID. */
     renderCaptcha(() => {
-      // Trigger `onLoad` if it exists.
       const { onLoad } = props;
+      
+      /** Trigger `onLoad` prop if it exists. */
       if (onLoad) onLoad(hcaptcha_functions);
     });
   };
 
   /**
    * Get response from the captcha
-   * and handle it with the `onVerify` prop.
+   * and dispatch it to the `onVerify` prop.
    */
   const handleSubmit = () => {
     const { isRemoved, captchaId } = state;
@@ -301,7 +294,12 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     props.onChallengeExpired();
   };
 
-  return <div ref={captcha_ref!} id={state.elementId}></div>;
+  return (
+    <div
+      ref={captcha_ref!}
+      id={state.elementId}
+    />
+  );
 }
 
 export default HCaptcha;

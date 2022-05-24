@@ -114,12 +114,26 @@ export interface HCaptchaConfig {
 
 export interface HCaptchaFunctions {
   resetCaptcha(): void;
-  renderCaptcha(): void;
+  renderCaptcha(onReady?: () => any): void;
   removeCaptcha(callback: () => any): void;
   
+  /**
+   * Get the associated ekey (challenge ID) for a successful solve.
+   * When the hCaptcha ID cannot be resolved, it throws `null`.
+   */
   getRespKey(): string | null;
+  
+  /**
+   * Get the response token, if any.
+   * When the hCaptcha ID cannot be resolved, it throws `null`. 
+   */
   getResponse(): string | null;
   
   setData(data: ConfigSetData): void;
-  execute(config?: ConfigExecute): void | Promise<HCaptchaResponse>;
+
+  /** Run `execute` on the captcha, without returning the response. */
+  executeSync(): void;
+
+  /** Returns a promise which resolves with `HCaptchaResponse`. */
+  execute(): Promise<HCaptchaResponse | undefined>;
 }
