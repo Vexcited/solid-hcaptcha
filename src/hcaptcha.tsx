@@ -25,18 +25,13 @@ const [apiScriptRequested, setApiScriptRequested] = createSignal(false);
 
 /** Generate hCaptcha API script. */
 const mountCaptchaScript = (params: GenerateQueryParams = {}) => {
-  console.info("mountCaptchaScript: mouting the hcaptcha api");
   setApiScriptRequested(true);
 
   // Create global onload callback.
   window._hcaptchaOnLoad = () => {
-    /** Debug. */ console.info("_hcaptchaOnLoad: init.");
-
     // Iterate over onload listeners, call each listener.
     setOnLoadListeners(listeners => listeners.filter(listener => {
-      /** Debug. */ console.info("_hcaptchaOnLoad: calling a listener.");
       listener();
-
       return false;
     }));
   }
@@ -76,17 +71,14 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   /** Once component is mounted, intialize hCaptcha. */
   onMount(() => {
-    console.info("onMount: checking if api is ready.");
 
     // Check if hCaptcha has already been loaded,
     // if not create script tag and wait to render captcha.
     if (!isApiReady()) {
-      console.info("onMount: api isn't ready, check if we called it.");
 
       // Only create the script tag once, use a global variable to track.
       if (!apiScriptRequested()) {
         const config: HCaptchaConfig = props.config || {};
-        /** debug */ console.info("onMount: api wasn't requested, mounting it with (config)", config);
 
         mountCaptchaScript({
           apihost: config.apihost,
@@ -264,8 +256,6 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   /** Handle error with the `onError` prop. */
   const handleError = (event: string) => {
-    console.log("handleError: (event):", event);
-
     const { onError } = props;
     const { captchaId } = state;
 
