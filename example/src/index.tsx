@@ -5,6 +5,8 @@ import { render } from "solid-js/web";
 import { Router, useRoutes, hashIntegration, Link } from "solid-app-router";
 import { routes } from "./demos";
 
+import "./styles/tailwind.css";
+
 const AppRouting: Component = () => {
   const Routes = useRoutes(routes.map(route_data => route_data.route));
 
