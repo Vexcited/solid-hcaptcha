@@ -24,7 +24,8 @@
   },
   "scripts": {
     "build": "rollup -c && rimraf ./dist/source ./dist/types && tsc",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "release": "release-it"
   },
   "author": {
     "url": "https://github.com/Vexcited/solid-hcaptcha",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@hcaptcha/types": "^1.0.1",
+    "release-it": "^15.0.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.74.1",
     "rollup-preset-solid": "^1.4.0",
