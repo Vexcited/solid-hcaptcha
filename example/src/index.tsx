@@ -15,7 +15,7 @@ const AppRouting: Component = () => {
       /** Using an hash router for GitHub Pages. */
       source={hashIntegration()}
     >
-      <h1>solid-hcaptcha</h1>
+      <Link href="/"><h1>solid-hcaptcha</h1></Link>
       <p>A Solid component wrapper for the hCaptcha widget.</p>
 
       <ul>

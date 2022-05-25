@@ -30,6 +30,16 @@ export const routes = [
   },
   {
     route: {
+      path: "/basic",
+      component: lazy(() => import("./basic"))
+    },
+
+    name: "Basic",
+    show: true
+  },
+
+  {
+    route: {
       path: "/",
       component: HomePage
     },

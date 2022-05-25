@@ -15,5 +15,12 @@ export default defineConfig({
   },
 
   /** Based on the GitHub Pages deploy URL. */
-  base: "/solid-hcaptcha/"
+  base: "/solid-hcaptcha/",
+
+  /** Allow serving files from one level up to the project root. */
+  server: {
+    fs: {
+      allow: [".."]
+    }
+  }
 });
