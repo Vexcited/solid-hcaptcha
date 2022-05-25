@@ -1,0 +1,1 @@
+import{i as o,c,t as r}from"./index.f32dbc64.js";import{H as n}from"./hcaptcha.2c88854a.js";const s=r("<div></div>"),p=()=>{const t=(e,a)=>{console.log(e,a)};return(()=>{const e=s.cloneNode(!0);return o(e,c(n,{onVerify:t,sitekey:"1cfa7710-ea6d-4734-bf4f-489e27fcb4eb"})),e})()};export{p as default};
