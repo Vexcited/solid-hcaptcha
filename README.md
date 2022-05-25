@@ -1,6 +1,6 @@
 # Solid hCaptcha Component Library
 
-> This is an unofficial port of [`react-hcaptcha`](https://github.com/hCaptcha/react-hcaptcha) for [Solid](https://www.solidjs.com).
+> This is an unofficial port of [`@hcaptcha/react-hcaptcha`](https://github.com/hCaptcha/react-hcaptcha) for [Solid](https://www.solidjs.com).
 
 ## Description
 
@@ -27,24 +27,60 @@ pnpm add solid-hcaptcha
 
 > You can see multiple use cases on the [example website](https://vexcited.github.io/solid-hcaptcha).
 
-```typescript
-// First, import the component.
+
+### Basic Usage
+
+```tsx
 import HCaptcha from "solid-hcaptcha";
 
-// Then use it in your components !
 const App: Component = () => {
   return (
     <HCaptcha
       sitekey="10000000-ffff-ffff-ffff-000000000001"
       onVerify={token => console.log(token)}
-      theme="light"
-      size="normal"
     />
   );
 };
 
 export default App;
 ``` 
+
+### Programmatic Usage
+
+```tsx
+import type { HCaptchaFunctions } from "solid-hcaptcha";
+import HCaptcha from "solid-hcaptcha";
+
+const App: Component = () => {
+  let hcaptcha: HCaptchaFunctions | undefined;
+
+  const submitCaptcha = async () => {
+    if (!hcaptcha) return; // Check if the widget has loaded.
+
+    // Execute the captcha and get the response.
+    const response = await hcaptcha.execute();
+    console.log(response);
+  }
+
+  return (
+    <div>
+      <HCaptcha
+        sitekey="10000000-ffff-ffff-ffff-000000000001"
+        onLoad={hcaptcha_instance => (hcaptcha = hcaptcha_instance)}
+        size="invisible"
+      />
+
+      <button onClick={submitCaptcha}>
+        Open captcha
+      </button>
+    </div>
+  );
+};
+
+export default App;
+``` 
+
+<!-- ## API -->
 
 ## Development
 
