@@ -1,12 +1,9 @@
 export interface HCaptchaState {
-  /** Whether the captcha is ready or not. */
-  isApiReady: boolean;
-  
   /** Whether the captcha was removed or not. */
   isRemoved: boolean;
 
   /** ID of the `div` element that contains the hCaptcha widget. */
-  elementId: string;
+  elementId?: string;
 
   /** Captcha identifier given by hCaptcha. */
   captchaId: string | null;
@@ -52,14 +49,14 @@ export interface HCaptchaProps {
    * hCaptcha allows you to decide how big the component
    * will appear on render.
    * 
-   * Defaults to `normal`.
+   * @default "normal".
    */
   size?: "normal" | "compact" | "invisible";
 
   /**
    * hCaptcha supports both a `light` and `dark` theme.
    * 
-   * Defaults to `light`.
+   * @default "light".
    */
   theme?: "light" | "dark";
 
@@ -67,16 +64,14 @@ export interface HCaptchaProps {
    * Set the tabindex of the widget and popup.
    * When appropriate, this can make navigation of your site more intuitive.
    * 
-   * Defaults to 0.
+   * @default 0
    */
   tabindex?: number;
 
   /**
-   * Manually set the ID of the hCaptcha component.
+   * Set an ID to the hCaptcha widget.
    * Make sure each hCaptcha component generated on a single
    * page has its own unique ID when using this prop.
-   * 
-   * Defaults to "solid-hcaptcha-script".
    */
   id?: string;
 

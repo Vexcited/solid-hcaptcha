@@ -1,4 +1,4 @@
-export interface GenerateQueryParams {
+export interface HCaptchaUrlParams {
   [key: string]:
     | string
     | boolean
@@ -7,16 +7,19 @@ export interface GenerateQueryParams {
     | null
 }
 
-export const generateQuery = (params: GenerateQueryParams) => {
-  const entries = Object.entries(params);
-  const values = entries.filter(([_key, value]) => value || value === false);
+export const generateScriptUrl = (params: HCaptchaUrlParams, onLoadFunctionName: string, apihost?: string) => {
+  const domain = apihost || "https://js.hcaptcha.com";
+  const url = new URL(domain);
+  url.pathname = "/1/api.js";
 
-  const queries = values.map(([key, value]) => {
-    if (!value) return;
-    return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-  });
+  for (const [key, value] of Object.entries(params)) {
+    if (!value) continue;
+    url.searchParams.set(encodeURIComponent(key), encodeURIComponent(value));
+  }
 
-  const query = queries.join("&");
-  return query;
-};
+  // Tell hCaptcha to not automatically render the widget.
+  url.searchParams.set("render", "explicit");
+  url.searchParams.set("onload", onLoadFunctionName);
 
+  return url.toString();
+}

@@ -1,9 +1,10 @@
 import type { Component } from "solid-js";
-import { onMount, onCleanup, createSignal, createEffect } from "solid-js";
+
+import { createScriptLoader } from "@solid-primitives/script-loader";
+import { onCleanup, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import type { GenerateQueryParams } from "./utils";
-import { generateQuery } from "./utils";
+import { generateScriptUrl } from "./utils";
 
 import type {
   HCaptchaConfig,
@@ -12,108 +13,50 @@ import type {
   HCaptchaFunctions
 } from "./types";
 
+/** The name of the function that will be triggered when hCaptcha is loaded. */
+const HCAPTCHA_ONLOAD_FUNCTION_NAME = "__hCaptchaOnLoad__";
+
 declare global {
   interface Window {
-    /** Function called when the hCaptcha script is loaded. */
-    _hcaptchaOnLoad: () => void;
+    [HCAPTCHA_ONLOAD_FUNCTION_NAME]: () => void;
   }
-}
-
-// Create script to init hCaptcha.
-const [_onLoadListeners, setOnLoadListeners] = createSignal<(() => void)[]>([]);
-const [apiScriptRequested, setApiScriptRequested] = createSignal(false);
-
-/** Generate hCaptcha API script. */
-const mountCaptchaScript = (params: GenerateQueryParams = {}) => {
-  setApiScriptRequested(true);
-
-  // Create global onload callback.
-  window._hcaptchaOnLoad = () => {
-    // Iterate over onload listeners, call each listener.
-    setOnLoadListeners(listeners => listeners.filter(listener => {
-      listener();
-      return false;
-    }));
-  }
-
-  const domain = params.apihost || "https://js.hcaptcha.com";
-  delete params.apihost;
-
-  const script = document.createElement("script");
-  script.src = `${domain}/1/api.js?render=explicit&onload=_hcaptchaOnLoad`;
-  script.async = true;
-
-  const query = generateQuery(params);
-  script.src += query !== ""? `&${query}` : "";
-
-  document.head.appendChild(script);
 }
 
 const HCaptcha: Component<HCaptchaProps> = (props) => {
-  /** Reference of the div captcha element. */
-  let captcha_ref: HTMLDivElement | undefined;
-  
-  const [state, setState] = createStore<HCaptchaState>({
-    isApiReady: false,
-    isRemoved: false,
-    elementId: props.id || "solid-hcaptcha-script",
-    captchaId: null
-  });
+  const config: HCaptchaConfig = props.config || {};
+
+  const script_url = generateScriptUrl({
+    assethost: config.assethost,
+    endpoint: config.endpoint,
+    hl: config.hl,
+    host: config.host,
+    imghost: config.imghost,
+    recaptchacompat: config.recaptchacompat === false ? "off" : null,
+    reportapi: config.reportapi,
+    sentry: config.sentry,
+    custom: config.custom
+  }, HCAPTCHA_ONLOAD_FUNCTION_NAME, config.apihost);
 
   /** Whether the hCaptcha API (in `window`) is ready. */
   const isApiReady = () => typeof window.hcaptcha !== "undefined";
 
   /** Whether the hCaptcha widget is ready (in `window` and not removed). */
   const isReady = () => {
-    const { isApiReady, isRemoved } = state;
-    return isApiReady && !isRemoved;
-  }
+    const { isRemoved } = state;
+    return isApiReady() && !isRemoved;
+  };
 
-  /** Once component is mounted, intialize hCaptcha. */
-  onMount(() => {
-
-    // Check if hCaptcha has already been loaded,
-    // if not create script tag and wait to render captcha.
-    if (!isApiReady()) {
-
-      // Only create the script tag once, use a global variable to track.
-      if (!apiScriptRequested()) {
-        const config: HCaptchaConfig = props.config || {};
-
-        mountCaptchaScript({
-          apihost: config.apihost,
-          assethost: config.assethost,
-          endpoint: config.endpoint,
-          hl: config.hl,
-          host: config.host,
-          imghost: config.imghost,
-          recaptchacompat: config.recaptchacompat === false ? "off" : null,
-          reportapi: config.reportapi,
-          sentry: config.sentry,
-          custom: config.custom
-        });
-      }
-
-      // Add onLoad callback to global onLoad listeners.
-      setOnLoadListeners(listeners => [...listeners, handleOnLoad]);
-    }
-
-    else renderCaptcha();
-  })
-
-  /** On unmount, reset the hCaptcha widget. */
-  onCleanup (() => {
-    const { captchaId } = state;
-    if (!isReady() || !captchaId) return;
-
-    // Reset any stored variables / timers when unmounting.
-    hcaptcha.reset(captchaId);
-    hcaptcha.remove(captchaId);
+  /** Reference of the hCaptcha widget element. */
+  let captcha_ref: HTMLDivElement | undefined;
+  
+  const [state, setState] = createStore<HCaptchaState>({
+    isRemoved: false,
+    elementId: props.id,
+    captchaId: null
   });
 
   const renderCaptcha: HCaptchaFunctions["renderCaptcha"] = (onReady) => {
-    const { isApiReady } = state;
-    if (!isApiReady || !captcha_ref) return;
+    if (!captcha_ref) return;
 
     /** Parameters for the hCaptcha widget. */
     const renderParams = Object.assign({
@@ -212,13 +155,11 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   /** Handle load with the `onLoad` prop. */
   const handleOnLoad = () => {
-    setState({ isApiReady: true });
+    /** Remove the function when it has been loaded. */
+    window[HCAPTCHA_ONLOAD_FUNCTION_NAME] = () => undefined;
 
-    /** Render captcha and wait for captcha ID. */
     renderCaptcha(() => {
       const { onLoad } = props;
-      
-      /** Trigger `onLoad` prop if it exists. */
       if (onLoad) onLoad(hcaptcha_functions);
     });
   };
@@ -283,6 +224,39 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     if (!isReady() || !props.onChallengeExpired) return;
     props.onChallengeExpired();
   };
+
+  /** On mount, initialize and load the hCaptcha script. */
+  onMount(() => {
+    if (!isApiReady()) {
+      /** Create the hCaptcha main load function. */
+      window[HCAPTCHA_ONLOAD_FUNCTION_NAME] = () => handleOnLoad();
+
+      /** Insert the script in the `head` element. */
+      createScriptLoader({
+        src: script_url
+      });
+  
+    } else handleOnLoad();
+  });
+
+  /** On unmount, reset and remove the hCaptcha widget. */
+  onCleanup (() => {
+    const { captchaId } = state;
+    if (!isReady() || !captchaId) return;
+
+    // Reset any stored variables / timers when unmounting.
+    hcaptcha.reset(captchaId);
+    hcaptcha.remove(captchaId);
+
+    /**
+     * We need to remove also the hCaptcha API on cleanup
+     * because `script-loader` automatically removes the script
+     * also on cleanup.
+     * 
+     * See here: <https://github.com/solidjs-community/solid-primitives/blob/main/packages/script-loader/src/index.ts>.
+     */
+    window.hcaptcha = undefined as unknown as HCaptcha;
+  });
 
   return (
     <div

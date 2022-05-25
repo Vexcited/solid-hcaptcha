@@ -43,5 +43,8 @@
   },
   "peerDependencies": {
     "solid-js": "^1.4.2"
+  },
+  "dependencies": {
+    "@solid-primitives/script-loader": "^1.1.0"
   }
 }
