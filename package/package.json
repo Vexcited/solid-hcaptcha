@@ -1,6 +1,6 @@
 {
   "name": "solid-hcaptcha",
-  "description": "Unofficial port of react-hcaptcha for Solid.",
+  "description": "hCaptcha Component Library for Solid.",
   "version": "0.2.2",
   "license": "MIT",
   "source": "./src/index.tsx",
