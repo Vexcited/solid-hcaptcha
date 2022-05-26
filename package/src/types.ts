@@ -109,8 +109,13 @@ export interface HCaptchaConfig {
 }
 
 export interface HCaptchaFunctions {
+  /** Reset the current challenge. */
   resetCaptcha(): void;
+
+  /** Manually render the hCaptcha widget. */
   renderCaptcha(onReady?: () => unknown): void;
+
+  /** Manually remove the hCaptcha widget from the DOM. */
   removeCaptcha(callback: () => unknown): void;
 
   /**
@@ -125,6 +130,7 @@ export interface HCaptchaFunctions {
    */
   getResponse(): string | null;
 
+  /** See enterprise docs. */
   setData(data: ConfigSetData): void;
 
   /** Run `execute` on the captcha, without returning the response. */
