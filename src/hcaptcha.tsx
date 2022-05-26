@@ -11,7 +11,7 @@ import type {
   HCaptchaProps,
   HCaptchaState,
   HCaptchaFunctions,
-  HCaptchaResponse
+  HCaptchaExecuteResponse
 } from "./types";
 
 /** The name of the function that will be triggered when hCaptcha is loaded. */
@@ -49,7 +49,7 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   /** Reference of the hCaptcha widget element. */
   let captcha_ref: HTMLDivElement | undefined;
-  
+
   const [state, setState] = createStore<HCaptchaState>({
     isRemoved: false,
     elementId: props.id,
@@ -60,7 +60,7 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     if (!captcha_ref) return;
 
     /** Parameters for the hCaptcha widget. */
-    const renderParams = Object.assign({
+    const renderParams: ConfigRender = Object.assign({
       "open-callback"        : handleOpen,
       "close-callback"       : handleClose,
       "error-callback"       : handleError,
@@ -71,7 +71,7 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
       "sitekey"              : props.sitekey,
       "tabindex"             : props.tabindex || 0,
       "theme"                : props.theme    || "light",
-      "size"                 : props.size     || "normal"
+      "size"                 : props.size     || "normal",
     });
 
     /**
@@ -82,15 +82,15 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
     setState({ isRemoved: false, captchaId });
     if (onReady) onReady();
-  }
+  };
 
   const resetCaptcha: HCaptchaFunctions["resetCaptcha"] = () => {
     const { captchaId } = state;
     if (!isReady() || !captchaId) return;
 
     // Reset captcha state, removes stored token and unticks checkbox.
-    hcaptcha.reset(captchaId)
-  }
+    hcaptcha.reset(captchaId);
+  };
 
   const removeCaptcha: HCaptchaFunctions["removeCaptcha"] = (callback) => {
     const { captchaId } = state;
@@ -99,7 +99,7 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     setState({ isRemoved: true });
 
     hcaptcha.remove(captchaId);
-    callback && callback()
+    callback && callback();
   };
 
   const executeSync: HCaptchaFunctions["executeSync"] = () => {
@@ -113,31 +113,30 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     const { captchaId } = state;
     if (!isReady() || !captchaId) return;
 
-    const response = await hcaptcha.execute(captchaId, { async: true }) as HCaptchaResponse;
-    return response;
+    const response = await hcaptcha.execute(captchaId, { async: true });
+    return response as HCaptchaExecuteResponse;
   };
 
   const setData: HCaptchaFunctions["setData"] = (data) => {
     const { captchaId } = state;
-    if (!captchaId) return;
+    if (!isReady() || !captchaId) return;
 
-    if (!isReady()) return;
-    hcaptcha.setData(captchaId, data);
-  }
+    return hcaptcha.setData(captchaId, data);
+  };
 
   const getResponse: HCaptchaFunctions["getResponse"] = () => {
     const { captchaId } = state;
     if (!captchaId) return null;
 
     return hcaptcha.getResponse(captchaId);
-  }
+  };
 
   const getRespKey: HCaptchaFunctions["getRespKey"] = () => {
     const { captchaId } = state;
     if (!captchaId) return null;
 
-    return hcaptcha.getRespKey(captchaId)
-  }
+    return hcaptcha.getRespKey(captchaId);
+  };
 
   /**
    * Helpers to be returned on the `onLoad` callback.
@@ -171,16 +170,16 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
    */
   const handleSubmit = () => {
     const { isRemoved, captchaId } = state;
-    if (typeof hcaptcha === "undefined" || isRemoved || !captchaId) return
-    
+    if (typeof hcaptcha === "undefined" || isRemoved || !captchaId) return;
+
     const { onVerify } = props;
     if (!onVerify) return;
 
     // Get response token from hCaptcha widget.
-    const token = hcaptcha.getResponse(captchaId); 
-    // Get current challenge session ID from hCaptcha widget. 
-    const ekey  = hcaptcha.getRespKey(captchaId);  
-    
+    const token = hcaptcha.getResponse(captchaId);
+    // Get current challenge session ID from hCaptcha widget.
+    const ekey  = hcaptcha.getRespKey(captchaId);
+
     // Dispatch event to verify user response.
     onVerify(token, ekey);
   };
@@ -192,19 +191,19 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     if (!isReady() || !captchaId) return;
 
     // Reset captcha when running into error.
-    hcaptcha.reset(captchaId)
+    hcaptcha.reset(captchaId);
     if (onExpire) onExpire();
   };
 
   /** Handle error with the `onError` prop. */
-  const handleError = (event: string) => {
+  const handleError = (event: HCaptchaError) => {
     const { onError } = props;
     const { captchaId } = state;
 
     if (!isReady() || !captchaId) return;
 
     // Reset captcha when running into error.
-    hcaptcha.reset(captchaId)
+    hcaptcha.reset(captchaId);
     if (onError) onError(event);
   };
 
@@ -236,8 +235,13 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
       createScriptLoader({
         src: script_url
       });
-  
-    } else handleOnLoad();
+    }
+
+    /**
+     * If the API is already ready (`window.hcaptcha` exists)
+     * render the captcha and trigger `onLoad` prop.
+     */
+    else handleOnLoad();
   });
 
   /** On unmount, reset and remove the hCaptcha widget. */
@@ -253,7 +257,7 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
      * We need to remove also the hCaptcha API on cleanup
      * because `script-loader` automatically removes the script
      * also on cleanup.
-     * 
+     *
      * See here: <https://github.com/solidjs-community/solid-primitives/blob/main/packages/script-loader/src/index.ts>.
      */
     window.hcaptcha = undefined as unknown as HCaptcha;
@@ -261,10 +265,11 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   return (
     <div
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       ref={captcha_ref!}
       id={state.elementId}
     />
   );
-}
+};
 
 export default HCaptcha;

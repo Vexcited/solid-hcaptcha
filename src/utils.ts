@@ -22,4 +22,4 @@ export const generateScriptUrl = (params: HCaptchaUrlParams, onLoadFunctionName:
   url.searchParams.set("onload", onLoadFunctionName);
 
   return url.toString();
-}
+};
