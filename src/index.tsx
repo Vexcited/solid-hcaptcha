@@ -1,8 +1,9 @@
 import HCaptcha from "./hcaptcha";
 
 export type {
-  HCaptchaConfig,
+  HCaptchaExecuteResponse,
   HCaptchaFunctions,
+  HCaptchaConfig,
   HCaptchaProps
 } from "./types";
 
