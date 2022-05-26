@@ -33,7 +33,6 @@
     "name": "Mikkel RINGAUD"
   },
   "devDependencies": {
-    "@hcaptcha/types": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",
@@ -48,6 +47,7 @@
     "solid-js": "^1.4.2"
   },
   "dependencies": {
+    "@hcaptcha/types": "^1.0.2",
     "@solid-primitives/script-loader": "^1.1.0"
   }
 }
