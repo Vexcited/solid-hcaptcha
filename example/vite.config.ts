@@ -21,6 +21,10 @@ export default defineConfig({
   server: {
     fs: {
       allow: [".."]
+    },
+    
+    hmr: {
+      clientPort: 443
     }
   }
 });
