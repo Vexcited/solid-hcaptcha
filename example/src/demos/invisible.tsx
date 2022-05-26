@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import type { HCaptchaFunctions, HCaptchaResponse } from "solid-hcaptcha";
+import type { HCaptchaFunctions, HCaptchaExecuteResponse } from "solid-hcaptcha";
 
 import { createSignal, Show } from "solid-js";
 import HCaptcha from "solid-hcaptcha";
@@ -7,7 +7,7 @@ import HCaptcha from "solid-hcaptcha";
 const InvisibleCaptchaDemo: Component = () => {
   let captcha: HCaptchaFunctions | undefined;
 
-  const [captchaResponse, setCaptchaResponse] = createSignal<HCaptchaResponse | null>(null);
+  const [captchaResponse, setCaptchaResponse] = createSignal<HCaptchaExecuteResponse | null>(null);
 
   const submitCaptcha = async (event: MouseEvent) => {
     event.preventDefault();
@@ -17,7 +17,7 @@ const InvisibleCaptchaDemo: Component = () => {
     if (!response) return;
 
     setCaptchaResponse(response);
-  }
+  };
 
   return (
     <div>
@@ -53,6 +53,6 @@ const InvisibleCaptchaDemo: Component = () => {
       </Show>
     </div>
   );
-}
+};
 
 export default InvisibleCaptchaDemo;

@@ -1,18 +1,18 @@
 import type { Component } from "solid-js";
-import type { HCaptchaResponse } from "solid-hcaptcha";
+import type { HCaptchaExecuteResponse } from "solid-hcaptcha";
 
 import { createSignal, Show } from "solid-js";
 import HCaptcha from "solid-hcaptcha";
 
 const BaiscCaptchaDemo: Component = () => {
-  const [captchaResponse, setCaptchaResponse] = createSignal<HCaptchaResponse | null>(null);
+  const [captchaResponse, setCaptchaResponse] = createSignal<HCaptchaExecuteResponse | null>(null);
 
   const handleCaptchaVerify = (token: string, eKey: string) => {
     setCaptchaResponse({
       response: token,
       key: eKey
     });
-  }
+  };
 
   return (
     <div>
@@ -39,6 +39,6 @@ const BaiscCaptchaDemo: Component = () => {
       </Show>
     </div>
   );
-}
+};
 
 export default BaiscCaptchaDemo;

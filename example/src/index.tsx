@@ -24,7 +24,7 @@ const AppRouting: Component = () => {
       </main>
     </Router>
   );
-}
+};
 
 render(
   () => <AppRouting />,

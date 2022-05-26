@@ -1,1 +1,1 @@
-declare const HCAPTCHA_SITEKEY: string
+declare const HCAPTCHA_SITEKEY: string;

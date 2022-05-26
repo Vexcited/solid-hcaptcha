@@ -5,7 +5,6 @@ import { Link } from "solid-app-router";
 import { routes } from "../demos";
 
 const Header: Component = () => {
-
   return (
     <>
       <header class="w-screen h-12 bg-slate-800 flex flex-row items-center justify-between px-4">

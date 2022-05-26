@@ -7,7 +7,7 @@ const HomePage: Component = () => {
   return (
     <p>Welcome ! Select a demo from the list above.</p>
   );
-}
+};
 
 const Error404Page: Component = () => {
   return (
@@ -16,7 +16,7 @@ const Error404Page: Component = () => {
       <Link href="/">Go to the home page</Link>
     </div>
   );
-}
+};
 
 export const routes = [
   {
@@ -24,7 +24,7 @@ export const routes = [
       path: "/invisible",
       component: lazy(() => import("./invisible"))
     },
-    
+
     name: "Invisible",
     show: true
   },
