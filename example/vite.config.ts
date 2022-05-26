@@ -3,7 +3,7 @@ import solidPlugin from "vite-plugin-solid";
 
 export default defineConfig({
   plugins: [solidPlugin()],
-  
+
   /** Global variables. */
   define: {
     HCAPTCHA_SITEKEY: JSON.stringify("1cfa7710-ea6d-4734-bf4f-489e27fcb4eb")
@@ -14,15 +14,23 @@ export default defineConfig({
     polyfillDynamicImport: false
   },
 
-  /** Based on the GitHub Pages deploy URL. */
+  /** GitHub Pages deploy sub-path. */
   base: "/solid-hcaptcha/",
 
-  /** Allow serving files from one level up to the project root. */
   server: {
+    /**
+     * Allow serving files from one level up to the project root.
+     * Useful when testing the build with `pnpm add ..`.
+     */
     fs: {
       allow: [".."]
     },
-    
+
+    /**
+     * Vite runs at port 3000 but as I use a reverse proxy,
+     * the website is served at HTTPS, on port 443.
+     * To fix HMR, I have to set the `clientPort` at `443` here.
+     */
     hmr: {
       clientPort: 443
     }

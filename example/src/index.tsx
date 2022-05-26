@@ -1,5 +1,5 @@
 /* @refresh reload */
-import { Component, For } from "solid-js";
+import { Component } from "solid-js";
 import { render } from "solid-js/web";
 
 import { Router, useRoutes, hashIntegration } from "solid-app-router";
