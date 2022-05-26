@@ -15,5 +15,5 @@
     "isolatedModules": true,
     "allowJs": true
   },
-  "include": ["package/src"]
+  "include": ["src"]
 }
