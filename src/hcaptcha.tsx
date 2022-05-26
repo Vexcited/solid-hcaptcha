@@ -265,7 +265,6 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   return (
     <div
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       ref={captcha_ref!}
       id={state.elementId}
     />
