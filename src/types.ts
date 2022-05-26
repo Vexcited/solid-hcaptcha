@@ -132,3 +132,8 @@ export interface HCaptchaFunctions {
   /** Returns a promise which resolves with `HCaptchaResponse`. */
   execute(): Promise<HCaptchaResponse | undefined>;
 }
+
+export interface HCaptchaResponse {
+  response: string;
+  key: string;
+}

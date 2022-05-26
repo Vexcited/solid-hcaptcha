@@ -10,7 +10,8 @@ import type {
   HCaptchaConfig,
   HCaptchaProps,
   HCaptchaState,
-  HCaptchaFunctions
+  HCaptchaFunctions,
+  HCaptchaResponse
 } from "./types";
 
 /** The name of the function that will be triggered when hCaptcha is loaded. */
