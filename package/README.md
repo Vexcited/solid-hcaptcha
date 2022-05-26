@@ -114,7 +114,6 @@ All the parameters are optional.
 | ---- | ----------- | ------- | ----------- |
 | `recaptchacompat` | `boolean` | `true` | Disable drop-in replacement for reCAPTCHA with `false` to prevent hCaptcha from injecting into `window.grecaptcha`. |
 | `hl` | `string` (ISO 639-2 code) | `auto` | hCaptcha auto-detects language via the user's browser. This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages). |
-|
 | `apihost` | `string` | `-` | See enterprise docs. |
 | `assethost` | `string` | `-` | See enterprise docs. |
 | `endpoint` | `string` | `-` | See enterprise docs. |
@@ -153,7 +152,7 @@ All the parameters are optional.
 
 Please note that "invisible" simply means that no hCaptcha button will be rendered. Whether a challenge shows up will depend on the sitekey difficulty level. Note to hCaptcha Enterprise ([BotStop](https://www.botstop.com)) users: select "Passive" or "99.9% Passive" modes to get this No-CAPTCHA behavior.
 
-## Development
+## Development (for /package)
 
 > `git clone https://github.com/Vexcited/solid-hcaptcha`
 
@@ -161,10 +160,10 @@ I use `pnpm` as the package manager, so run `pnpm install` to install the depend
 
 ### Scripts
 
-* `pnpm build`: Builds to the `dist` folder.
+* `pnpm build`: Lints and builds to the `dist` folder.
 * `pnpm lint`: Checks if there's any TypeScript error.
-* `pnpm release`: Script that I use to release new versions of this package.
+* `pnpm release`: Runs `release-it` to release new versions.
 
-### Example
+### Example Website
 
-You can see how to contribute to the [example website](https://vexcited.github.io/solid-hcaptcha) in the [`example` folder](./example/). 
+You can see how to contribute to the [example website](https://vexcited.github.io/solid-hcaptcha/) in the [`example` folder](/example/).
