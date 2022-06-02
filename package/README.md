@@ -100,8 +100,8 @@ export default App;
 | Name | Values/Type | Required | Default | Description |
 | ---- | ----------- | -------- | ------- | ----------- |
 | `sitekey` | `string` | **Yes** | `-` | This is your sitekey, this allows you to load captcha. If you need a sitekey, please visit hCaptcha, and sign up to get your sitekey. |
-| `size` | `"normal" | "compact" | "invisible"` | No | `"normal"` | This specifies the "size" of the component. hCaptcha allows you to decide how big the component will appear on render, this always defaults to normal. |
-| `theme` | `"light" | "dark"` | No | `"light"` | hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light. |
+| `size` | `"normal" \| "compact" \| "invisible"` | No | `"normal"` | This specifies the "size" of the component. hCaptcha allows you to decide how big the component will appear on render, this always defaults to normal. |
+| `theme` | `"light" \| "dark"` | No | `"light"` | hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light. |
 | `tabindex` | `number` | No | `0` | Set the tabindex of the widget and popup. When appropriate, this can make navigation of your site more intuitive. |
 | `id` | `string` | No | `-` | Set an ID to the hCaptcha widget. Make sure each hCaptcha component generated on a single page has its own unique ID when using this prop. |
 | `config` | [`HCaptchaConfig`](#advanced-configuration) | No | `{}` | Advanced configuration for the hCaptcha component. |
