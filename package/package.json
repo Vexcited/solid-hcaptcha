@@ -1,9 +1,11 @@
 {
   "name": "solid-hcaptcha",
   "description": "hCaptcha Component Library for Solid.",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "license": "MIT",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "source": "./src/index.tsx",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
