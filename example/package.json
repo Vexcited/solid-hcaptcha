@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "lint": "eslint && tsc"
+    "lint": "eslint src --fix && tsc"
   },
   "license": "MIT",
   "devDependencies": {

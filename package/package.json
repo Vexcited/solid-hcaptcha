@@ -27,7 +27,7 @@
   },
   "scripts": {
     "build": "rollup -c && rimraf ./dist/source ./dist/types && tsc",
-    "lint": "eslint ./src && tsc --noEmit",
+    "lint": "eslint src --fix && tsc --noEmit",
     "release": "release-it"
   },
   "author": {

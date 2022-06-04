@@ -14,10 +14,6 @@ jobs:
     name: Deploy Website
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./example
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -50,7 +46,8 @@ jobs:
       - name: Install dependencies and build
         run: |
           pnpm install
-          pnpm build
+          pnpm --filter solid-hcaptcha build
+          pnpm --filter solid-hcaptcha-example build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.3.3
