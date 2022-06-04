@@ -3,12 +3,11 @@
   "description": "hCaptcha Component Library for Solid.",
   "version": "0.2.4",
   "license": "MIT",
+  "files": ["dist"],
   "source": "./src/index.tsx",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "main": "dist/esm/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "keywords": [
     "hcaptcha",
     "captcha",
@@ -19,7 +18,9 @@
     ".": {
       "solid": "./dist/source/index.jsx",
       "import": "./dist/esm/index.js",
-      "browser": "./dist/esm/index.js"
+      "browser": "./dist/esm/index.js",
+      "require": "./dist/esm/index.js",
+      "node": "./dist/esm/index.js"
     }
   },
   "scripts": {
@@ -28,10 +29,18 @@
     "release": "release-it"
   },
   "author": {
-    "url": "https://github.com/Vexcited/solid-hcaptcha",
+    "url": "https://github.com/Vexcited",
     "email": "mikkel@milescode.dev",
     "name": "Mikkel RINGAUD"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vexcited/solid-hcaptcha.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Vexcited/solid-hcaptcha/issues"
+  },
+  "homepage": "https://github.com/Vexcited/solid-hcaptcha",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "@typescript-eslint/parser": "^5.26.0",
