@@ -1,7 +1,7 @@
 import type { Component } from "solid-js";
 
 import { lazy } from "solid-js";
-import { Link } from "solid-app-router";
+import { A } from "@solidjs/router";
 
 const HomePage: Component = () => {
   return (
@@ -13,7 +13,7 @@ const Error404Page: Component = () => {
   return (
     <div>
       <p>This demo is unknown. Please select a valid demo from the list above.</p>
-      <Link href="/">Go to the home page</Link>
+      <A href="/">Go to the home page</A>
     </div>
   );
 };

@@ -2,7 +2,7 @@
 import { Component } from "solid-js";
 import { render } from "solid-js/web";
 
-import { Router, useRoutes, hashIntegration } from "solid-app-router";
+import { Router, useRoutes, hashIntegration } from "@solidjs/router";
 import { routes } from "./demos";
 
 import "./styles/tailwind.css";
@@ -20,7 +20,6 @@ const AppRouting: Component = () => {
 
       <main class="px-6">
         <Routes />
-
       </main>
     </Router>
   );
