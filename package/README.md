@@ -2,31 +2,33 @@
 
 > This is a port of [`@hcaptcha/react-hcaptcha`](https://github.com/hCaptcha/react-hcaptcha) for [Solid](https://www.solidjs.com).
 
-## Description
-
 [hCaptcha](https://www.hcaptcha.com) is a drop-replacement for reCAPTCHA that protects user privacy, rewards websites, and helps companies get their data labeled.
 
-Sign up at [hCaptcha](https://www.hcaptcha.com) to get your sitekey today. You need a sitekey to use this library.
+Sign up at [hCaptcha](https://www.hcaptcha.com) to get your sitekey today. **You need a sitekey to use this library.**
+
+1. [Installation](#installation)
+2. [Implementation](#implementation)
+3. [References](#references)
+4. [Debugging](#debugging)
 
 ## Installation
 
 You can install this library via your favorite package manager.
 
 ```bash
-# NPM
+# npm
 npm install solid-hcaptcha --save
 
 # Yarn
 yarn add solid-hcaptcha
 
-# PNPm
+# pnpm
 pnpm add solid-hcaptcha
 ```
 
-## Usage
+## Implementation
 
-> You can see multiple use cases on the [example website](https://vexcited.github.io/solid-hcaptcha).
-
+> You can see multiple demos on the [example website](https://vexcited.github.io/solid-hcaptcha).
 
 ### Basic Usage
 
@@ -93,7 +95,7 @@ const App: Component = () => {
 export default App;
 ``` 
 
-## API
+## References
 
 ### Props
 
@@ -104,9 +106,9 @@ export default App;
 | `theme` | `"light" \| "dark"` | No | `"light"` | hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light. |
 | `tabindex` | `number` | No | `0` | Set the tabindex of the widget and popup. When appropriate, this can make navigation of your site more intuitive. |
 | `id` | `string` | No | `-` | Set an ID to the hCaptcha widget. Make sure each hCaptcha component generated on a single page has its own unique ID when using this prop. |
-| `config` | [`HCaptchaConfig`](#advanced-configuration) | No | `{}` | Advanced configuration for the hCaptcha component. |
+| `config` | [`HCaptchaConfig`](#advanced-configuration-hcaptchaconfig) | No | `{}` | Advanced configuration for the hCaptcha component. |
 
-### Advanced Configuration
+### Advanced Configuration (`HCaptchaConfig`)
 
 All the parameters are optional.
 
@@ -135,7 +137,7 @@ All the parameters are optional.
 | `onClose` | `-` | When the user dismisses a challenge. |
 | `onChallengeExpired` | `-` | When the user display of a challenge times out with no answer. |
 
-### Methods from hCaptcha instance (type `HCaptchaFunctions`)
+### Methods from hCaptcha instance (`HCaptchaFunctions`)
 
 | Method | Description |
 | ------ | ----------- |
@@ -148,22 +150,15 @@ All the parameters are optional.
 | `resetCaptcha()` | Reset the current challenge. |
 | `setData()` | See enterprise docs. |
 
-**NOTE**: Make sure to reset the hCaptcha state when you submit your form by calling the method `.resetCaptcha` on your hCaptcha Solid Component ! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
+> **Note** \
+> Make sure to reset the hCaptcha state when you submit your form by calling the method `.resetCaptcha` on your hCaptcha Solid Component! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
 
 Please note that "invisible" simply means that no hCaptcha button will be rendered. Whether a challenge shows up will depend on the sitekey difficulty level. Note to hCaptcha Enterprise ([BotStop](https://www.botstop.com)) users: select "Passive" or "99.9% Passive" modes to get this No-CAPTCHA behavior.
 
-## Development (for /package)
+## Debugging
 
-> `git clone https://github.com/Vexcited/solid-hcaptcha`
+1. #### Make sure you don't double-import the api.js script
+    Importing the JS SDK twice can cause unpredictable behavior, so don't do a direct import separately if you are using solid-hcaptcha.
 
-I use `pnpm` as the package manager, so run `pnpm install` to install the dependencies.
-
-### Scripts
-
-* `pnpm build`: Lints and builds to the `dist` folder.
-* `pnpm lint`: Checks if there's any TypeScript error.
-* `pnpm release`: Runs `release-it` to release new versions.
-
-### Example Website
-
-You can see how to contribute to the [example website](https://vexcited.github.io/solid-hcaptcha/) in the [`example` folder](/example/).
+2. #### Make sure you are using `recaptchacompat: false` if you have the reCAPTCHA JS loaded on the same page.
+    The hCaptcha "compatibility mode" will interfere with reCAPTCHA, as it adds properties with the same name. If for any reason you are running both hCaptcha and reCAPTCHA in parallel (they recommend only running hCaptcha) then please disable their compatibility mode.
