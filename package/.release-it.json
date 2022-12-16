@@ -7,7 +7,7 @@
   "github": {
     "release": true,
     "draft": false,
-    "releaseName": "Release v${version}"
+    "releaseName": "v${version}"
   },
   "npm": {
     "publish": true

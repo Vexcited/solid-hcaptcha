@@ -1,0 +1,8 @@
+{
+  "name": "solid-hcaptcha-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "release": "pnpm --filter solid-hcaptcha release"
+  }
+}
