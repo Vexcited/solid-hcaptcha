@@ -13,6 +13,9 @@ importers:
       '@solidjs/router':
         specifier: ^0.8.3
         version: 0.8.3(solid-js@1.7.11)
+      '@unocss/reset':
+        specifier: ^0.55.4
+        version: 0.55.4
       solid-hcaptcha:
         specifier: workspace:*
         version: link:../package
@@ -1901,20 +1904,6 @@ packages:
       terser: 5.19.3
     dev: true
 
-  /@rollup/pluginutils@5.0.4:
-    resolution: {integrity: sha512-0KJnIoRI8A+a1dqOYLxH8vBf8bphDmty5QvIm2hqm7oFCFYKCAZWWd2hXgMibaPsNDhI0AtpYfQZJG47pt/k4g==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@types/estree': 1.0.1
-      estree-walker: 2.0.2
-      picomatch: 2.3.1
-    dev: true
-
   /@rollup/pluginutils@5.0.4(rollup@3.28.1):
     resolution: {integrity: sha512-0KJnIoRI8A+a1dqOYLxH8vBf8bphDmty5QvIm2hqm7oFCFYKCAZWWd2hXgMibaPsNDhI0AtpYfQZJG47pt/k4g==}
     engines: {node: '>=14.0.0'}
@@ -2294,7 +2283,7 @@ packages:
     hasBin: true
     dependencies:
       '@ampproject/remapping': 2.2.1
-      '@rollup/pluginutils': 5.0.4
+      '@rollup/pluginutils': 5.0.4(rollup@3.28.1)
       '@unocss/config': 0.55.4
       '@unocss/core': 0.55.4
       '@unocss/preset-uno': 0.55.4
@@ -2415,7 +2404,6 @@ packages:
 
   /@unocss/reset@0.55.4:
     resolution: {integrity: sha512-USn/uZiXDplwQwhodyE3wBm7SU9BUDbRJ3sl5SuULAC4uMkh2JE/EV+X88Vm4N9dEIAbuWLfG20fCuiEKA5+hA==}
-    dev: true
 
   /@unocss/scope@0.55.4:
     resolution: {integrity: sha512-3v/3X3pD+NXkPw7WOiePM9SpPbkVj+tzNnUsF4CX8AoTE+UcNt5hDiyHYvCRtk7Q27PRrEddaMMpoVUOyigO5A==}
@@ -2458,7 +2446,7 @@ packages:
       vite: ^2.9.0 || ^3.0.0-0 || ^4.0.0
     dependencies:
       '@ampproject/remapping': 2.2.1
-      '@rollup/pluginutils': 5.0.4
+      '@rollup/pluginutils': 5.0.4(rollup@3.28.1)
       '@unocss/config': 0.55.4
       '@unocss/core': 0.55.4
       '@unocss/inspector': 0.55.4

@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@solidjs/router": "^0.8.3",
+    "@unocss/reset": "^0.55.4",
     "solid-hcaptcha": "workspace:*",
     "solid-js": "^1.7.11"
   }

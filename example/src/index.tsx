@@ -1,11 +1,13 @@
 /* @refresh reload */
+import "@unocss/reset/tailwind.css";
+import "virtual:uno.css";
+
 import type { Component } from "solid-js";
 import { render } from "solid-js/web";
 
 import { Router, useRoutes, hashIntegration } from "@solidjs/router";
 import { routes } from "./demos";
 
-import "virtual:uno.css";
 import Header from "./components/Header";
 
 const AppRouting: Component = () => {
