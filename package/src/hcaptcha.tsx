@@ -7,7 +7,6 @@ import { createStore } from "solid-js/store";
 import { generateScriptUrl } from "./utils";
 
 import type {
-  HCaptchaConfig,
   HCaptchaProps,
   HCaptchaState,
   HCaptchaFunctions,
@@ -24,19 +23,17 @@ declare global {
 }
 
 const HCaptcha: Component<HCaptchaProps> = (props) => {
-  const config: HCaptchaConfig = props.config || {};
-
-  const script_url = generateScriptUrl({
-    assethost: config.assethost,
-    endpoint: config.endpoint,
-    hl: config.hl,
-    host: config.host,
-    imghost: config.imghost,
-    recaptchacompat: config.recaptchacompat === false ? "off" : null,
-    reportapi: config.reportapi,
-    sentry: config.sentry,
-    custom: config.custom
-  }, HCAPTCHA_ONLOAD_FUNCTION_NAME, config.apihost);
+  const script_url = () => generateScriptUrl({
+    assethost: props.config?.assethost,
+    endpoint: props.config?.endpoint,
+    hl: props.config?.hl,
+    host: props.config?.host,
+    imghost: props.config?.imghost,
+    recaptchacompat: props.config?.recaptchacompat === false ? "off" : null,
+    reportapi: props.config?.reportapi,
+    sentry: props.config?.sentry,
+    custom: props.config?.custom
+  }, HCAPTCHA_ONLOAD_FUNCTION_NAME, props.config?.apihost);
 
   /** Whether the hCaptcha API (in `window`) is ready. */
   const isApiReady = () => typeof window.hcaptcha !== "undefined";
@@ -52,7 +49,6 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   const [state, setState] = createStore<HCaptchaState>({
     isRemoved: false,
-    elementId: props.id,
     captchaId: null
   });
 
@@ -85,57 +81,45 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
   };
 
   const resetCaptcha: HCaptchaFunctions["resetCaptcha"] = () => {
-    const { captchaId } = state;
-    if (!isReady() || !captchaId) return;
+    if (!isReady() || !state.captchaId) return;
 
     // Reset captcha state, removes stored token and unticks checkbox.
-    hcaptcha.reset(captchaId);
+    hcaptcha.reset(state.captchaId);
   };
 
   const removeCaptcha: HCaptchaFunctions["removeCaptcha"] = (callback) => {
-    const { captchaId } = state;
-    if (!isReady() || !captchaId) return;
-
+    if (!isReady() || !state.captchaId) return;
     setState({ isRemoved: true });
 
-    hcaptcha.remove(captchaId);
+    hcaptcha.remove(state.captchaId);
     callback && callback();
   };
 
   const executeSync: HCaptchaFunctions["executeSync"] = () => {
-    const { captchaId } = state;
-    if (!isReady() || !captchaId) return;
-
-    return hcaptcha.execute(captchaId, { async: false });
+    if (!isReady() || !state.captchaId) return;
+    return hcaptcha.execute(state.captchaId, { async: false });
   };
 
   const execute: HCaptchaFunctions["execute"] = async () => {
-    const { captchaId } = state;
-    if (!isReady() || !captchaId) return;
+    if (!isReady() || !state.captchaId) return;
 
-    const response = await hcaptcha.execute(captchaId, { async: true });
+    const response = await hcaptcha.execute(state.captchaId, { async: true });
     return response as HCaptchaExecuteResponse;
   };
 
   const setData: HCaptchaFunctions["setData"] = (data) => {
-    const { captchaId } = state;
-    if (!isReady() || !captchaId) return;
-
-    return hcaptcha.setData(captchaId, data);
+    if (!isReady() || !state.captchaId) return;
+    return hcaptcha.setData(state.captchaId, data);
   };
 
   const getResponse: HCaptchaFunctions["getResponse"] = () => {
-    const { captchaId } = state;
-    if (!captchaId) return null;
-
-    return hcaptcha.getResponse(captchaId);
+    if (!state.captchaId) return null;
+    return hcaptcha.getResponse(state.captchaId);
   };
 
   const getRespKey: HCaptchaFunctions["getRespKey"] = () => {
-    const { captchaId } = state;
-    if (!captchaId) return null;
-
-    return hcaptcha.getRespKey(captchaId);
+    if (!state.captchaId) return null;
+    return hcaptcha.getRespKey(state.captchaId);
   };
 
   /**
@@ -158,10 +142,8 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     /** Remove the function when it has been loaded. */
     window[HCAPTCHA_ONLOAD_FUNCTION_NAME] = () => undefined;
 
-    renderCaptcha(() => {
-      const { onLoad } = props;
-      if (onLoad) onLoad(hcaptcha_functions);
-    });
+    const onReady = () => props.onLoad?.(hcaptcha_functions);
+    renderCaptcha(onReady);
   };
 
   /**
@@ -169,72 +151,62 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
    * and dispatch it to the `onVerify` prop.
    */
   const handleSubmit = () => {
-    const { isRemoved, captchaId } = state;
-    if (typeof hcaptcha === "undefined" || isRemoved || !captchaId) return;
-
-    const { onVerify } = props;
-    if (!onVerify) return;
+    if (typeof hcaptcha === "undefined" || state.isRemoved || !state.captchaId) return;
+    if (!props.onVerify) return;
 
     // Get response token from hCaptcha widget.
-    const token = hcaptcha.getResponse(captchaId);
+    const token = hcaptcha.getResponse(state.captchaId);
     // Get current challenge session ID from hCaptcha widget.
-    const ekey  = hcaptcha.getRespKey(captchaId);
+    const ekey = hcaptcha.getRespKey(state.captchaId);
 
     // Dispatch event to verify user response.
-    onVerify(token, ekey);
+    props.onVerify(token, ekey);
   };
 
   /** Handle expire with the `onExpire` prop. */
   const handleExpire = () => {
-    const { onExpire } = props;
-    const { captchaId } = state;
-    if (!isReady() || !captchaId) return;
+    if (!isReady() || !state.captchaId) return;
 
     // Reset captcha when running into error.
-    hcaptcha.reset(captchaId);
-    if (onExpire) onExpire();
+    hcaptcha.reset(state.captchaId);
+    props.onExpire?.();
   };
 
   /** Handle error with the `onError` prop. */
   const handleError = (event: HCaptchaError) => {
-    const { onError } = props;
-    const { captchaId } = state;
-
-    if (!isReady() || !captchaId) return;
+    if (!isReady() || !state.captchaId) return;
 
     // Reset captcha when running into error.
-    hcaptcha.reset(captchaId);
-    if (onError) onError(event);
+    hcaptcha.reset(state.captchaId);
+    props.onError?.(event);
   };
 
   /** Handle open with the `onOpen` prop. */
   const handleOpen = () => {
-    if (!isReady() || !props.onOpen) return;
-    props.onOpen();
+    if (!isReady()) return;
+    props.onOpen?.();
   };
 
   /** Handle close with the `onClose` prop. */
   const handleClose = () => {
-    if (!isReady() || !props.onClose) return;
-    props.onClose();
+    if (!isReady()) return;
+    props.onClose?.();
   };
 
   /** Handle the expired challenge with the `onChallengeExpired` prop. */
   const handleChallengeExpired = () => {
-    if (!isReady() || !props.onChallengeExpired) return;
-    props.onChallengeExpired();
+    if (!isReady()) return;
+    props.onChallengeExpired?.();
   };
 
   /** On mount, initialize and load the hCaptcha script. */
   onMount(() => {
     if (!isApiReady()) {
       /** Create the hCaptcha main load function. */
-      window[HCAPTCHA_ONLOAD_FUNCTION_NAME] = () => handleOnLoad();
+      window[HCAPTCHA_ONLOAD_FUNCTION_NAME] = handleOnLoad;
 
       /** Insert the script in the `head` element. */
-      createScriptLoader({
-        src: script_url
-      });
+      createScriptLoader({ src: script_url() });
     }
 
     /**
@@ -246,12 +218,11 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   /** On unmount, reset and remove the hCaptcha widget. */
   onCleanup (() => {
-    const { captchaId } = state;
-    if (!isReady() || !captchaId) return;
+    if (!isReady() || !state.captchaId) return;
 
     // Reset any stored variables / timers when unmounting.
-    hcaptcha.reset(captchaId);
-    hcaptcha.remove(captchaId);
+    hcaptcha.reset(state.captchaId);
+    hcaptcha.remove(state.captchaId);
 
     /**
      * We need to remove also the hCaptcha API on cleanup
@@ -266,7 +237,7 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
   return (
     <div
       ref={captcha_ref!}
-      id={state.elementId}
+      id={props.id}
     />
   );
 };
