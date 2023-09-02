@@ -1,6 +1,4 @@
-import type { Component } from "solid-js";
-
-import { lazy } from "solid-js";
+import { type Component, lazy } from "solid-js";
 import { A } from "@solidjs/router";
 
 const HomePage: Component = () => {

@@ -1,7 +1,5 @@
-import type { Component } from "solid-js";
-
 import { createScriptLoader } from "@solid-primitives/script-loader";
-import { onCleanup, onMount } from "solid-js";
+import { type Component, onCleanup, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { generateScriptUrl } from "./utils";

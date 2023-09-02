@@ -1,8 +1,5 @@
-import type { Component } from "solid-js";
-import type { HCaptchaFunctions, HCaptchaExecuteResponse } from "solid-hcaptcha";
-
-import { createSignal, Show } from "solid-js";
-import HCaptcha from "solid-hcaptcha";
+import { type Component, createSignal, Show } from "solid-js";
+import HCaptcha, { type HCaptchaFunctions, type HCaptchaExecuteResponse} from "solid-hcaptcha";
 
 const InvisibleCaptchaDemo: Component = () => {
   let captcha: HCaptchaFunctions | undefined;
@@ -35,21 +32,24 @@ const InvisibleCaptchaDemo: Component = () => {
         Show captcha
       </button>
 
-      <Show when={captchaResponse() !== null} fallback={<p>Click on the button above to open the captcha.</p>}>
-        <p>Captcha completed !</p>
+      <Show when={captchaResponse()} fallback={<p>Click on the button above to open the captcha.</p>}>
+        {response => (
+          <>
+            <p>Captcha completed !</p>
 
-        <div>
-          <h2>response</h2>
-          <code>
-            {captchaResponse()!.response}
-          </code>
+            <div>
+              <h2>response</h2>
+              <code>
+                {response().response}
+              </code>
 
-          <h2>key</h2>
-          <code>
-            {captchaResponse()!.key}
-          </code>
-        </div>
-
+              <h2>key</h2>
+              <code>
+                {response().key}
+              </code>
+            </div>
+          </>
+        )}
       </Show>
     </div>
   );

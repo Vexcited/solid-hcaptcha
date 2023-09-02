@@ -1,10 +1,7 @@
-import type { Component } from "solid-js";
-import type { HCaptchaExecuteResponse } from "solid-hcaptcha";
+import { type Component, createSignal, Show } from "solid-js";
+import HCaptcha, { type HCaptchaExecuteResponse } from "solid-hcaptcha";
 
-import { createSignal, Show } from "solid-js";
-import HCaptcha from "solid-hcaptcha";
-
-const BaiscCaptchaDemo: Component = () => {
+const BasicCaptchaDemo: Component = () => {
   const [captchaResponse, setCaptchaResponse] = createSignal<HCaptchaExecuteResponse | null>(null);
 
   const handleCaptchaVerify = (token: string, eKey: string) => {
@@ -21,24 +18,27 @@ const BaiscCaptchaDemo: Component = () => {
         onVerify={handleCaptchaVerify}
       />
 
-      <Show when={captchaResponse() !== null} fallback={<p>Click on the button above to open the captcha.</p>}>
-        <p>Captcha completed !</p>
+      <Show when={captchaResponse()} fallback={<p>Click on the button above to open the captcha.</p>}>
+        {response => (
+          <>
+            <p>Captcha completed !</p>
 
-        <div>
-          <h2>response</h2>
-          <code>
-            {captchaResponse()!.response}
-          </code>
+            <div>
+              <h2>response</h2>
+              <code>
+                {response().response}
+              </code>
 
-          <h2>key</h2>
-          <code>
-            {captchaResponse()!.key}
-          </code>
-        </div>
-
+              <h2>key</h2>
+              <code>
+                {response().key}
+              </code>
+            </div>
+          </>
+        )}
       </Show>
     </div>
   );
 };
 
-export default BaiscCaptchaDemo;
+export default BasicCaptchaDemo;
