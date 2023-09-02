@@ -1,8 +1,10 @@
 import { defineConfig } from "vite";
-import solidPlugin from "vite-plugin-solid";
+
+import unocss from "unocss/vite";
+import solid from "vite-plugin-solid";
 
 export default defineConfig({
-  plugins: [solidPlugin()],
+  plugins: [unocss(), solid()],
 
   /** Global variables. */
   define: {

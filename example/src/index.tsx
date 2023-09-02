@@ -5,7 +5,7 @@ import { render } from "solid-js/web";
 import { Router, useRoutes, hashIntegration } from "@solidjs/router";
 import { routes } from "./demos";
 
-import "./styles/tailwind.css";
+import "virtual:uno.css";
 import Header from "./components/Header";
 
 const AppRouting: Component = () => {
