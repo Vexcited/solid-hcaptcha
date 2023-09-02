@@ -2,9 +2,6 @@ export interface HCaptchaState {
   /** Whether the captcha was removed or not. */
   isRemoved: boolean;
 
-  /** ID of the `div` element that contains the hCaptcha widget. */
-  elementId?: string;
-
   /** Captcha identifier given by hCaptcha. */
   captchaId: string | null;
 }
