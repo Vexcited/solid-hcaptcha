@@ -5,7 +5,8 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:solid/typescript"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -13,16 +14,13 @@
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "solid"
   ],
   "rules": {
     "indent": [
       "error",
       2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
     ],
     "quotes": [
       "error",
