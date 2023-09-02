@@ -50,7 +50,7 @@ const App: Component = () => {
 };
 
 export default App;
-``` 
+```
 
 ### Programmatic Usage
 
@@ -93,7 +93,7 @@ const App: Component = () => {
 };
 
 export default App;
-``` 
+```
 
 ## References
 
@@ -132,7 +132,7 @@ All the parameters are optional.
 | `onError` | `error: HCaptchaError` | When an error occurs. Component will reset immediately after an error. |
 | `onVerify` | `token: string, eKey: string` | When challenge is completed. The response `token` and an `eKey` (session ID) are passed along. |
 | `onExpire` | `-` | When the current token expires. |
-| `onLoad` | `hcaptcha: HCaptchaFunctions` | When the hCaptcha API loads. The hCaptcha instance is passed along. You can store them to use, later, [its methods](#methods-from-hcaptcha-instance-type-hcaptchafunctions). |
+| `onLoad` | `hcaptcha: HCaptchaFunctions` | When the hCaptcha API loads. The hCaptcha instance is passed along. You can store them to use, later, [its methods](#methods-from-hcaptcha-instance-hcaptchafunctions). |
 | `onOpen` | `-` | When the user display of a challenge starts. |
 | `onClose` | `-` | When the user dismisses a challenge. |
 | `onChallengeExpired` | `-` | When the user display of a challenge times out with no answer. |
@@ -157,8 +157,10 @@ Please note that "invisible" simply means that no hCaptcha button will be render
 
 ## Debugging
 
-1. #### Make sure you don't double-import the api.js script
-    Importing the JS SDK twice can cause unpredictable behavior, so don't do a direct import separately if you are using solid-hcaptcha.
+### Make sure you don't double-import the `api.js` script
 
-2. #### Make sure you are using `recaptchacompat: false` if you have the reCAPTCHA JS loaded on the same page.
-    The hCaptcha "compatibility mode" will interfere with reCAPTCHA, as it adds properties with the same name. If for any reason you are running both hCaptcha and reCAPTCHA in parallel (they recommend only running hCaptcha) then please disable their compatibility mode.
+Importing the JS SDK twice can cause unpredictable behavior, so don't do a direct import separately if you are using solid-hcaptcha.
+
+### Make sure you are using `recaptchacompat: false` if you have the reCAPTCHA JS loaded on the same page
+
+parallel (they recommend only running hCaptcha) then please disable their compatibility mode.
