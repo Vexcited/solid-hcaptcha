@@ -38,28 +38,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Vexcited/solid-hcaptcha.git"
+    "url": "https://github.com/Vexcited/solid-hcaptcha.git",
+    "directory": "package"
   },
   "bugs": {
     "url": "https://github.com/Vexcited/solid-hcaptcha/issues"
   },
-  "homepage": "https://github.com/Vexcited/solid-hcaptcha",
+  "homepage": "https://vexcited.github.io/solid-hcaptcha/",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.46.1",
-    "@typescript-eslint/parser": "^5.46.1",
-    "eslint": "^8.29.0",
-    "release-it": "^15.5.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^3.7.4",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "eslint": "^8.48.0",
+    "eslint-plugin-solid": "^0.13.0",
+    "release-it": "^16.1.5",
+    "rimraf": "^5.0.1",
+    "rollup": "^3.28.1",
     "rollup-preset-solid": "^2.0.1",
-    "solid-js": "^1.6.5",
-    "typescript": "^4.9.4"
+    "solid-js": "^1.7.11",
+    "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "solid-js": "^1.6.5"
+    "solid-js": "^1.6.15 || ^1.7.11"
   },
   "dependencies": {
     "@hcaptcha/types": "^1.0.3",
-    "@solid-primitives/script-loader": "^1.1.2"
+    "@solid-primitives/script-loader": "^2.0.2"
   }
 }
