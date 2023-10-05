@@ -2,9 +2,7 @@ import { defineConfig } from "tsup";
 import { parsePresetOptions, generatePackageExports, writePackageJson, generateTsupOptions, type PresetOptions } from "tsup-preset-solid";
 
 const preset_options: PresetOptions = {
-  entries: {
-    entry: "src/index.tsx"
-  },
+  entries: { entry: "src/index.tsx" },
 
   // Remove all `console.*` calls and `debugger` statements in builds
   drop_console: true,
@@ -14,7 +12,6 @@ const preset_options: PresetOptions = {
 
 export default defineConfig(config => {
   const watching = !!config.watch;
-
   const parsed_data = parsePresetOptions(preset_options, watching);
 
   if (!watching) {
@@ -23,8 +20,8 @@ export default defineConfig(config => {
   }
 
   return generateTsupOptions(parsed_data).map((tsup_options) => {
-    tsup_options.minify = true;
     tsup_options.sourcemap = true;
+    tsup_options.minify = "terser";
     return tsup_options;
   });
 });
