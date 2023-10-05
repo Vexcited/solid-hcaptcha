@@ -60,12 +60,12 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
       "error-callback"       : handleError,
       "chalexpired-callback" : handleChallengeExpired,
       "expired-callback"     : handleExpire,
-      "callback"             : handleSubmit,
+      "callback"             : handleSubmit
     }, props.config, {
       "sitekey"              : props.sitekey,
       "tabindex"             : props.tabindex || 0,
       "theme"                : props.theme    || "light",
-      "size"                 : props.size     || "normal",
+      "size"                 : props.size     || "normal"
     });
 
     /**

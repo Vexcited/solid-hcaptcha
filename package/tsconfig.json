@@ -3,17 +3,17 @@
     "strict": true,
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "types": ["@hcaptcha/types"],
-    "declaration": true,
-    "outDir": "./dist/source",
-    "declarationDir": "./dist/types",
+    "noEmit": true,
     "isolatedModules": true,
     "allowJs": true
   },
-  "include": ["src"]
+
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

@@ -7,10 +7,9 @@
   "files": [
     "dist"
   ],
-  "source": "./src/index.tsx",
-  "main": "dist/esm/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "keywords": [
     "hcaptcha",
     "captcha",
@@ -18,17 +17,15 @@
     "solid"
   ],
   "exports": {
-    ".": {
-      "solid": "./dist/source/index.jsx",
-      "import": "./dist/esm/index.js",
-      "browser": "./dist/esm/index.js",
-      "require": "./dist/esm/index.js",
-      "node": "./dist/esm/index.js"
+    "solid": "./dist/index.jsx",
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "rollup -c && rimraf ./dist/source ./dist/types && tsc",
-    "lint": "eslint src --fix && tsc --noEmit",
+    "build": "pnpm lint && rimraf dist && tsup",
+    "lint": "eslint src --fix && tsc",
     "release": "release-it"
   },
   "author": {
@@ -52,9 +49,9 @@
     "eslint-plugin-solid": "^0.13.0",
     "release-it": "^16.1.5",
     "rimraf": "^5.0.1",
-    "rollup": "^3.28.1",
-    "rollup-preset-solid": "^2.0.1",
     "solid-js": "^1.7.11",
+    "tsup": "^7.2.0",
+    "tsup-preset-solid": "^2.1.0",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
@@ -63,5 +60,7 @@
   "dependencies": {
     "@hcaptcha/types": "^1.0.3",
     "@solid-primitives/script-loader": "^2.0.2"
-  }
+  },
+  "browser": {},
+  "typesVersions": {}
 }

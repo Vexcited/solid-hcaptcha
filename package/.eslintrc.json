@@ -34,6 +34,10 @@
       "error",
       "stroustrup"
     ],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
 
     "no-console": "error",
     "no-trailing-spaces": "error",
