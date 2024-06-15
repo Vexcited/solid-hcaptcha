@@ -1,10 +1,9 @@
-name: Deploy
+name: Deploy example to GitHub Pages
 
 on:
   push:
-    paths:
-      - "example/**"
-      - "!example/README.md"
+    branches: ["main"]
+  workflow_dispatch:
 
 # Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
