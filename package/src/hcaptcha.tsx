@@ -1,8 +1,5 @@
-import { createScriptLoader } from "@solid-primitives/script-loader";
-import { type Component, onCleanup, onMount } from "solid-js";
+import { type Component, createEffect, on, onCleanup, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
-
-import { generateScriptUrl } from "./utils";
 
 import type {
   HCaptchaProps,
@@ -11,27 +8,40 @@ import type {
   HCaptchaExecuteResponse
 } from "./types";
 
-/** The name of the function that will be triggered when hCaptcha is loaded. */
-const HCAPTCHA_ONLOAD_FUNCTION_NAME = "__hCaptchaOnLoad__";
-
-declare global {
-  interface Window {
-    [HCAPTCHA_ONLOAD_FUNCTION_NAME]: () => void;
-  }
-}
+import { hCaptchaLoader, initSentry } from "@hcaptcha/loader";
+import { breadcrumbMessages, scopeTag } from "./constants";
 
 const HCaptcha: Component<HCaptchaProps> = (props) => {
-  const script_url = () => generateScriptUrl({
-    assethost: props.config?.assethost,
-    endpoint: props.config?.endpoint,
-    hl: props.config?.hl,
-    host: props.config?.host,
-    imghost: props.config?.imghost,
-    recaptchacompat: props.config?.recaptchacompat === false ? "off" : null,
-    reportapi: props.config?.reportapi,
-    sentry: props.config?.sentry,
-    custom: props.config?.custom
-  }, HCAPTCHA_ONLOAD_FUNCTION_NAME, props.config?.apihost);
+  let sentryHub: ReturnType<typeof initSentry> = null;
+  let apiScriptRequest = false;
+
+  const loadCaptcha = () => {
+    if (apiScriptRequest) return;
+
+    const mountParams = {
+      render: "explicit",
+      apihost: props?.apihost,
+      assethost: props?.assethost,
+      endpoint: props?.endpoint,
+      hl: props?.languageOverride,
+      host: props?.host,
+      imghost: props?.imghost,
+      recaptchacompat: props?.reCaptchaCompat === false ? "off" : null,
+      reportapi: props?.reportapi,
+      sentry: props?.sentry,
+      custom: props?.custom,
+      loadAsync: props?.loadAsync ?? true,
+      cleanup: props?.cleanup ?? true,
+      scriptSource: props?.scriptSource,
+      secureApi: props?.secureApi
+    };
+
+    hCaptchaLoader(mountParams)
+      .then(handleOnLoad, handleError)
+      .catch(handleError);
+
+    apiScriptRequest = true;
+  };
 
   /** Whether the hCaptcha API (in `window`) is ready. */
   const isApiReady = () => typeof window.hcaptcha !== "undefined";
@@ -52,6 +62,7 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   const renderCaptcha: HCaptchaFunctions["renderCaptcha"] = (onReady) => {
     if (!captcha_ref) return;
+    if (!isApiReady()) return;
 
     /** Parameters for the hCaptcha widget. */
     const renderParams: ConfigRender = Object.assign({
@@ -61,11 +72,9 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
       "chalexpired-callback" : handleChallengeExpired,
       "expired-callback"     : handleExpire,
       "callback"             : handleSubmit
-    }, props.config, {
-      "sitekey"              : props.sitekey,
-      "tabindex"             : props.tabindex || 0,
-      "theme"                : props.theme    || "light",
-      "size"                 : props.size     || "normal"
+    }, props, {
+      hl: props.hl || props.languageOverride,
+      languageOverride: undefined
     });
 
     /**
@@ -75,7 +84,7 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     const captchaId = hcaptcha.render(captcha_ref, renderParams) as string;
 
     setState({ isRemoved: false, captchaId });
-    if (onReady) onReady();
+    onReady?.();
   };
 
   const resetCaptcha: HCaptchaFunctions["resetCaptcha"] = () => {
@@ -83,6 +92,11 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
     // Reset captcha state, removes stored token and unticks checkbox.
     hcaptcha.reset(state.captchaId);
+
+    sentryHub?.addBreadcrumb({
+      category: scopeTag.value,
+      message: breadcrumbMessages.reset
+    });
   };
 
   const removeCaptcha: HCaptchaFunctions["removeCaptcha"] = (callback) => {
@@ -90,19 +104,47 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     setState({ isRemoved: true });
 
     hcaptcha.remove(state.captchaId);
-    callback && callback();
+    callback?.();
+
+    sentryHub?.addBreadcrumb({
+      category: scopeTag.value,
+      message: breadcrumbMessages.removed
+    });
   };
 
-  const executeSync: HCaptchaFunctions["executeSync"] = () => {
-    if (!isReady() || !state.captchaId) return;
-    return hcaptcha.execute(state.captchaId, { async: false });
+  /** Handle load with the `onLoad` prop. */
+  const handleOnLoad = () => {
+    try {
+      renderCaptcha(() => {
+        props.onLoad?.(hcaptcha_functions);
+      });
+    }
+    catch (e) {
+      sentryHub?.captureException(e);
+    }
   };
 
-  const execute: HCaptchaFunctions["execute"] = async () => {
+  const executeSync: HCaptchaFunctions["executeSync"] = (rqdata?: string) => {
     if (!isReady() || !state.captchaId) return;
 
-    const response = await hcaptcha.execute(state.captchaId, { async: true });
-    return response as HCaptchaExecuteResponse;
+    try {
+      return hcaptcha.execute(state.captchaId, { async: false, rqdata });
+    }
+    catch (e) {
+      sentryHub?.captureException(e);
+    }
+  };
+
+  const execute: HCaptchaFunctions["execute"] = async (rqdata?: string) => {
+    if (!isReady() || !state.captchaId) return;
+
+    try {
+      const response = await hcaptcha.execute(state.captchaId, { async: true, rqdata });
+      return response as HCaptchaExecuteResponse;
+    }
+    catch (e) {
+      sentryHub?.captureException(e);
+    }
   };
 
   const setData: HCaptchaFunctions["setData"] = (data) => {
@@ -135,30 +177,19 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     setData
   };
 
-  /** Handle load with the `onLoad` prop. */
-  const handleOnLoad = () => {
-    /** Remove the function when it has been loaded. */
-    window[HCAPTCHA_ONLOAD_FUNCTION_NAME] = () => undefined;
-
-    const onReady = () => props.onLoad?.(hcaptcha_functions);
-    renderCaptcha(onReady);
-  };
-
   /**
    * Get response from the captcha
    * and dispatch it to the `onVerify` prop.
    */
   const handleSubmit = () => {
-    if (typeof hcaptcha === "undefined" || state.isRemoved || !state.captchaId) return;
-    if (!props.onVerify) return;
+    if (!isApiReady() || state.isRemoved || !state.captchaId) return;
 
     // Get response token from hCaptcha widget.
     const token = hcaptcha.getResponse(state.captchaId);
     // Get current challenge session ID from hCaptcha widget.
     const ekey = hcaptcha.getRespKey(state.captchaId);
-
     // Dispatch event to verify user response.
-    props.onVerify(token, ekey);
+    props.onVerify?.(token, ekey);
   };
 
   /** Handle expire with the `onExpire` prop. */
@@ -168,14 +199,22 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     // Reset captcha when running into error.
     hcaptcha.reset(state.captchaId);
     props.onExpire?.();
+
+    sentryHub?.addBreadcrumb({
+      category: scopeTag.value,
+      message: breadcrumbMessages.expired
+    });
   };
 
   /** Handle error with the `onError` prop. */
   const handleError = (event: HCaptchaError) => {
-    if (!isReady() || !state.captchaId) return;
+    if (isReady() && state.captchaId) {
+      // If hCaptcha runs into error, reset captcha.
+      hcaptcha.reset(state.captchaId);
+    }
 
-    // Reset captcha when running into error.
-    hcaptcha.reset(state.captchaId);
+    sentryHub?.captureException(event);
+
     props.onError?.(event);
   };
 
@@ -199,19 +238,22 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   /** On mount, initialize and load the hCaptcha script. */
   onMount(() => {
-    if (!isApiReady()) {
-      /** Create the hCaptcha main load function. */
-      window[HCAPTCHA_ONLOAD_FUNCTION_NAME] = handleOnLoad;
+    sentryHub = initSentry(props.sentry ?? true, scopeTag);
 
-      /** Insert the script in the `head` element. */
-      createScriptLoader({ src: script_url() });
+    sentryHub?.addBreadcrumb({
+      category: scopeTag.value,
+      message: breadcrumbMessages.mounted
+    });
+
+    if (isApiReady()) {
+      renderCaptcha();
     }
 
     /**
      * If the API is already ready (`window.hcaptcha` exists)
      * render the captcha and trigger `onLoad` prop.
      */
-    else handleOnLoad();
+    loadCaptcha();
   });
 
   /** On unmount, reset and remove the hCaptcha widget. */
@@ -222,19 +264,24 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     hcaptcha.reset(state.captchaId);
     hcaptcha.remove(state.captchaId);
 
-    /**
-     * We need to remove also the hCaptcha API on cleanup
-     * because `script-loader` automatically removes the script
-     * also on cleanup.
-     *
-     * See here: <https://github.com/solidjs-community/solid-primitives/blob/main/packages/script-loader/src/index.ts>.
-     */
-    window.hcaptcha = undefined as unknown as HCaptcha;
+    sentryHub?.addBreadcrumb({
+      category: scopeTag.value,
+      message: breadcrumbMessages.unmounted
+    });
   });
+
+  createEffect(on([
+    () => props.sitekey,
+    () => props.size,
+    () => props.theme,
+    () => props.tabindex,
+    () => props.languageOverride,
+    () => props.endpoint
+  ], () => removeCaptcha(() => renderCaptcha())));
 
   return (
     <div
-      ref={captcha_ref!}
+      ref={captcha_ref}
       id={props.id}
     />
   );

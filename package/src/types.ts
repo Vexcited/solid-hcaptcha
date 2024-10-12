@@ -55,7 +55,7 @@ export interface HCaptchaProps {
    *
    * @default "light".
    */
-  theme?: "light" | "dark";
+  theme?: "light" | "dark" | "contrast" | object;
 
   /**
    * Set the tabindex of the widget and popup.
@@ -73,18 +73,10 @@ export interface HCaptchaProps {
   id?: string;
 
   /**
-   * Advanced configuration for
-   * the hCaptcha component.
-   */
-  config?: HCaptchaConfig;
-}
-
-export interface HCaptchaConfig {
-  /**
    * Disable drop-in replacement for reCAPTCHA with `false`
    * to prevent hCaptcha from injecting into `window.grecaptcha`.
    */
-  recaptchacompat?: boolean;
+  reCaptchaCompat?: boolean;
 
   /**
    * When setting to `auto`, hCaptcha auto-detects language via the user's browser.
@@ -93,6 +85,8 @@ export interface HCaptchaConfig {
    * @see https://docs.hcaptcha.com/languages/
    * @default "auto"
    */
+  languageOverride?: string;
+  /** @deprecated Use `languageOverride` instead. */
   hl?: string;
 
   apihost?: string;
@@ -101,9 +95,28 @@ export interface HCaptchaConfig {
   host?: string;
   imghost?: string;
   reportapi?: string;
-  sentry?: string;
+  secureApi?: string;
+  scriptSource?: string;
   custom?: boolean;
+
+  /**
+   * Set if the script should be loaded asynchronously.
+   * @default true
+   */
+  loadAsync?: boolean;
+
+  /**
+   * Remove script tag after setup.
+   * @default true
+   */
+  cleanup?: boolean
+
+  /**
+   * Should enable Sentry reporting for hCaptcha.
+   */
+  sentry?: boolean;
 }
+
 
 export interface HCaptchaFunctions {
   /** Reset the current challenge. */
@@ -113,7 +126,7 @@ export interface HCaptchaFunctions {
   renderCaptcha(onReady?: () => unknown): void;
 
   /** Manually remove the hCaptcha widget from the DOM. */
-  removeCaptcha(callback: () => unknown): void;
+  removeCaptcha(callback?: () => unknown): void;
 
   /**
    * Get the associated ekey (challenge ID) for a successful solve.

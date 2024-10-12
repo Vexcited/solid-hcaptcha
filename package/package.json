@@ -30,8 +30,8 @@
   },
   "author": {
     "url": "https://github.com/Vexcited",
-    "email": "mikkel@milescode.dev",
-    "name": "Mikkel RINGAUD"
+    "email": "vexitofficial@gmail.com",
+    "name": "Mikkel ALMONTE--RINGAUD"
   },
   "repository": {
     "type": "git",
@@ -45,22 +45,22 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
-    "eslint": "^8.50.0",
-    "eslint-plugin-solid": "^0.13.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-solid": "^0.14.3",
     "release-it": "^16.2.1",
     "rimraf": "^5.0.5",
-    "solid-js": "^1.7.12",
+    "solid-js": "^1.9.2",
     "terser": "^5.21.0",
-    "tsup": "^7.2.0",
-    "tsup-preset-solid": "^2.1.0",
+    "tsup": "^8.3.0",
+    "tsup-preset-solid": "^2.2.0",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "solid-js": "^1.6.15 || ^1.7.12"
+    "solid-js": "^1.6.0 || ^1.7.0 || ^1.8.0 || ^1.9.0"
   },
   "dependencies": {
-    "@hcaptcha/types": "^1.0.3",
-    "@solid-primitives/script-loader": "^2.0.2"
+    "@hcaptcha/loader": "^1.2.4",
+    "@hcaptcha/types": "^1.0.4"
   },
   "browser": {},
   "typesVersions": {}

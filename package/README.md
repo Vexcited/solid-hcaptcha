@@ -103,27 +103,23 @@ export default App;
 | ---- | ----------- | -------- | ------- | ----------- |
 | `sitekey` | `string` | **Yes** | `-` | This is your sitekey, this allows you to load captcha. If you need a sitekey, please visit hCaptcha, and sign up to get your sitekey. |
 | `size` | `"normal" \| "compact" \| "invisible"` | No | `"normal"` | This specifies the "size" of the component. hCaptcha allows you to decide how big the component will appear on render, this always defaults to normal. |
-| `theme` | `"light" \| "dark"` | No | `"light"` | hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light. |
+| `theme` | `"light" \| "dark" \| "constrast"` or `object` | No | `"light"` | hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light. Takes `object` if custom theme is used. |
 | `tabindex` | `number` | No | `0` | Set the tabindex of the widget and popup. When appropriate, this can make navigation of your site more intuitive. |
 | `id` | `string` | No | `-` | Set an ID to the hCaptcha widget. Make sure each hCaptcha component generated on a single page has its own unique ID when using this prop. |
-| `config` | [`HCaptchaConfig`](#advanced-configuration-hcaptchaconfig) | No | `{}` | Advanced configuration for the hCaptcha component. |
-
-### Advanced Configuration (`HCaptchaConfig`)
-
-All the parameters are optional.
-
-| Name | Values/Type | Default | Description |
-| ---- | ----------- | ------- | ----------- |
-| `recaptchacompat` | `boolean` | `true` | Disable drop-in replacement for reCAPTCHA with `false` to prevent hCaptcha from injecting into `window.grecaptcha`. |
-| `hl` | `string` (ISO 639-2 code) | `auto` | hCaptcha auto-detects language via the user's browser. This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages). |
-| `apihost` | `string` | `-` | See enterprise docs. |
-| `assethost` | `string` | `-` | See enterprise docs. |
-| `endpoint` | `string` | `-` | See enterprise docs. |
-| `host` | `string` | `-` | See enterprise docs. |
-| `imghost` | `string` | `-` | See enterprise docs. |
-| `reportapi` | `string` | `-` | See enterprise docs. |
-| `sentry` | `string` | `-` | See enterprise docs. |
-| `custom` | `boolean` |`-` | See enterprise docs. |
+| `reCaptchaCompat` | `boolean` | No | `true` | Disable drop-in replacement for reCAPTCHA with `false` to prevent hCaptcha from injecting into `window.grecaptcha`. |
+| `languageOverride` | `string` (ISO 639-2 code) | No | `auto` | hCaptcha auto-detects language via the user's browser. This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages). |
+| `apihost` | `string` | No | `-` | See enterprise docs. |
+| `assethost` | `string` | No | `-` | See enterprise docs. |
+| `endpoint` | `string` | No | `-` | See enterprise docs. |
+| `host` | `string` | No | `-` | See enterprise docs. |
+| `imghost` | `string` | No | `-` | See enterprise docs. |
+| `reportapi` | `string` | No | `-` | See enterprise docs. |
+| `secureApi` | `boolean` | No |`-`| See enterprise docs. |
+| `scriptSource` | `string` | No |`-`| See enterprise docs. |
+| `sentry` | `boolean` | **Yes** | `-` | Should enable Sentry reporting for hCaptcha. |
+| `custom` | `boolean` | No | `-` | Custom theme: see enterprise docs. |
+| `cleanup` | `boolean` | No | `true` | Remove script tag after setup. |
+| `loadAsync` | `boolean` | No | `true` | Set if the script should be loaded asynchronously. |
 
 ### Events Props
 
@@ -161,6 +157,11 @@ Please note that "invisible" simply means that no hCaptcha button will be render
 
 Importing the JS SDK twice can cause unpredictable behavior, so don't do a direct import separately if you are using solid-hcaptcha.
 
-### Make sure you are using `recaptchacompat: false` if you have the reCAPTCHA JS loaded on the same page
+### Make sure you are using `reCaptchaCompat={false}` if you have the reCAPTCHA JS loaded on the same page
 
-parallel (they recommend only running hCaptcha) then please disable their compatibility mode.
+The hCaptcha "compatibility mode" will interfere with reCAPTCHA, as it adds properties with the same name. If for any reason you are running both hCaptcha and reCAPTCHA in parallel (we recommend only running hCaptcha) then please disable our compatibility mode.
+
+### Avoid conflicts with legacy Sentry package usage on solid-hcaptcha 1.0.0+
+
+If you are using Sentry 7.x in your SolidJS app, this can conflict with the upstream `hcaptcha-loader` package's Sentry error tracing.
+You can avoid this issue by setting the `sentry` prop to `false`.
