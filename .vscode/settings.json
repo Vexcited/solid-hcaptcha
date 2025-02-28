@@ -4,21 +4,6 @@
   "editor.tabSize": 2,
 
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "always"
   },
-
-  "eslint.validate": [
-    "typescript",
-    "javascript"
-  ],
-  
-  "cSpell.words": [
-    "apihost",
-    "assethost",
-    "chalexpired",
-    "imghost",
-    "recaptchacompat",
-    "reportapi",
-    "unticks"
-  ]
 }
