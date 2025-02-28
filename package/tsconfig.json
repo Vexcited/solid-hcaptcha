@@ -1,19 +1,22 @@
 {
   "compilerOptions": {
-    "strict": true,
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "bundler",
+
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+
+    "isolatedModules": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": ["@hcaptcha/types"],
-    "noEmit": true,
-    "isolatedModules": true,
-    "allowJs": true
+    "types": ["@hcaptcha/types"]
   },
 
-  "include": ["src"],
+  "include": ["src", "tsup.config.ts", "eslint.config.mjs"],
   "exclude": ["node_modules", "dist"]
 }

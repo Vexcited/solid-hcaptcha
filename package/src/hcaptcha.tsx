@@ -8,25 +8,24 @@ import type {
   HCaptchaExecuteResponse
 } from "./types";
 
-import { hCaptchaLoader, initSentry } from "@hcaptcha/loader";
-import { breadcrumbMessages, scopeTag } from "./constants";
+// @ts-ignore - hCaptcha API is badly typed
+import { hCaptchaLoader } from "@hcaptcha/loader";
 
 const HCaptcha: Component<HCaptchaProps> = (props) => {
-  let sentryHub: ReturnType<typeof initSentry> = null;
   let apiScriptRequest = false;
 
   const loadCaptcha = () => {
     if (apiScriptRequest) return;
 
     const mountParams = {
-      render: "explicit",
+      render: "explicit" as const,
       apihost: props?.apihost,
       assethost: props?.assethost,
       endpoint: props?.endpoint,
       hl: props?.languageOverride,
       host: props?.host,
       imghost: props?.imghost,
-      recaptchacompat: props?.reCaptchaCompat === false ? "off" : null,
+      recaptchacompat: props?.reCaptchaCompat === false ? "off" : void 0,
       reportapi: props?.reportapi,
       sentry: props?.sentry,
       custom: props?.custom,
@@ -92,11 +91,6 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
     // Reset captcha state, removes stored token and unticks checkbox.
     hcaptcha.reset(state.captchaId);
-
-    sentryHub?.addBreadcrumb({
-      category: scopeTag.value,
-      message: breadcrumbMessages.reset
-    });
   };
 
   const removeCaptcha: HCaptchaFunctions["removeCaptcha"] = (callback) => {
@@ -105,46 +99,25 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
     hcaptcha.remove(state.captchaId);
     callback?.();
-
-    sentryHub?.addBreadcrumb({
-      category: scopeTag.value,
-      message: breadcrumbMessages.removed
-    });
   };
 
   /** Handle load with the `onLoad` prop. */
   const handleOnLoad = () => {
-    try {
-      renderCaptcha(() => {
-        props.onLoad?.(hcaptcha_functions);
-      });
-    }
-    catch (e) {
-      sentryHub?.captureException(e);
-    }
+    renderCaptcha(() => {
+      props.onLoad?.(hcaptcha_functions);
+    });
   };
 
   const executeSync: HCaptchaFunctions["executeSync"] = (rqdata?: string) => {
     if (!isReady() || !state.captchaId) return;
-
-    try {
-      return hcaptcha.execute(state.captchaId, { async: false, rqdata });
-    }
-    catch (e) {
-      sentryHub?.captureException(e);
-    }
+    return hcaptcha.execute(state.captchaId, { async: false, rqdata });
   };
 
   const execute: HCaptchaFunctions["execute"] = async (rqdata?: string) => {
     if (!isReady() || !state.captchaId) return;
 
-    try {
-      const response = await hcaptcha.execute(state.captchaId, { async: true, rqdata });
-      return response as HCaptchaExecuteResponse;
-    }
-    catch (e) {
-      sentryHub?.captureException(e);
-    }
+    const response = await hcaptcha.execute(state.captchaId, { async: true, rqdata });
+    return response as HCaptchaExecuteResponse;
   };
 
   const setData: HCaptchaFunctions["setData"] = (data) => {
@@ -199,11 +172,6 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     // Reset captcha when running into error.
     hcaptcha.reset(state.captchaId);
     props.onExpire?.();
-
-    sentryHub?.addBreadcrumb({
-      category: scopeTag.value,
-      message: breadcrumbMessages.expired
-    });
   };
 
   /** Handle error with the `onError` prop. */
@@ -212,8 +180,6 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
       // If hCaptcha runs into error, reset captcha.
       hcaptcha.reset(state.captchaId);
     }
-
-    sentryHub?.captureException(event);
 
     props.onError?.(event);
   };
@@ -238,13 +204,6 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
 
   /** On mount, initialize and load the hCaptcha script. */
   onMount(() => {
-    sentryHub = initSentry(props.sentry ?? true, scopeTag);
-
-    sentryHub?.addBreadcrumb({
-      category: scopeTag.value,
-      message: breadcrumbMessages.mounted
-    });
-
     if (isApiReady()) {
       renderCaptcha();
     }
@@ -263,11 +222,6 @@ const HCaptcha: Component<HCaptchaProps> = (props) => {
     // Reset any stored variables / timers when unmounting.
     hcaptcha.reset(state.captchaId);
     hcaptcha.remove(state.captchaId);
-
-    sentryHub?.addBreadcrumb({
-      category: scopeTag.value,
-      message: breadcrumbMessages.unmounted
-    });
   });
 
   createEffect(on([
