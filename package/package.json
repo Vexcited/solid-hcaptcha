@@ -29,13 +29,12 @@
     "release": "release-it"
   },
   "author": {
-    "url": "https://github.com/Vexcited",
-    "email": "vexitofficial@gmail.com",
+    "url": "https://www.vexcited.com/",
+    "email": "contact@vexcited.com",
     "name": "Mikkel ALMONTE--RINGAUD"
   },
   "repository": {
-    "type": "git",
-    "url": "https://github.com/Vexcited/solid-hcaptcha.git",
+    "url": "git+https://github.com/Vexcited/solid-hcaptcha.git",
     "directory": "package"
   },
   "bugs": {
@@ -43,24 +42,45 @@
   },
   "homepage": "https://vexcited.github.io/solid-hcaptcha/",
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^4.1.0",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
-    "@typescript-eslint/parser": "^6.7.4",
-    "eslint": "^8.57.1",
+    "@typescript-eslint/parser": "^8.25.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-perfectionist": "^4.9.0",
     "eslint-plugin-solid": "^0.14.3",
-    "release-it": "^17.8.2",
+    "release-it": "^18.1.2",
     "rimraf": "^5.0.5",
-    "solid-js": "^1.9.2",
-    "terser": "^5.21.0",
-    "tsup": "^8.3.0",
+    "solid-js": "^1.9.5",
+    "terser": "^5.39.0",
+    "tsup": "^8.4.0",
     "tsup-preset-solid": "^2.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "solid-js": "^1.6.0 || ^1.7.0 || ^1.8.0 || ^1.9.0"
   },
   "dependencies": {
-    "@hcaptcha/loader": "^1.2.4",
+    "@hcaptcha/loader": "^2.0.0",
     "@hcaptcha/types": "^1.0.4"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release v${version}",
+      "tagAnnotation": "Release v${version}",
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "draft": false,
+      "releaseName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "hooks": {
+      "before:init": "pnpm lint",
+      "after:bump": "pnpm build"
+    }
   },
   "browser": {},
   "typesVersions": {}
